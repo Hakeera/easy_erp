@@ -1,15 +1,31 @@
 package main
 
 import (
-	"net/http"
-	
+	"log"
+	"os"
+
+	"github.com/Hakeera/easy_erp/configuration"
+	"github.com/Hakeera/easy_erp/routes"
 	"github.com/labstack/echo/v4"
 )
 
 func main() {
+
+	configuration.LoadEnv() 
+
+    	log.Println("DB_HOST:", os.Getenv("DB_HOST"))
+
+
+
+	// Inicializa o banco de dados
+	configuration.InitDB()
+
 	e := echo.New()
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
+
+	// Configurar rotas
+	routes.ClientRoutes(e)
+
+	// Iniciar o servidor
 	e.Logger.Fatal(e.Start(":1323"))
 }
+

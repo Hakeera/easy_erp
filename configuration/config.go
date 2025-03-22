@@ -1,10 +1,16 @@
-package config
+package configuration
 
 import (
-    "github.com/labstack/echo/v4"
+	"log"
+
+	"github.com/joho/godotenv"
 )
 
-// Função para configurar o Echo e o Templ
-func Init(e *echo.Echo) {
+// LoadEnv carrega variáveis do arquivo .env
+func LoadEnv() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("Aviso: Não foi possível carregar o arquivo .env, usando variáveis de ambiente existentes")
+	}
 }
 
