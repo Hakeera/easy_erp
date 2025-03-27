@@ -9,9 +9,9 @@ import (
 
 // Criar Cliente
 func CreateClient(client *model.Client) error {
-	db := configuration.GetDB()
-	if err := db.Create(client).Error; err != nil {
-		return err
+	result := configuration.DB.Create(client) // Isso deve adicionar o cliente ao banco
+	if result.Error != nil {
+		return result.Error
 	}
 	return nil
 }

@@ -9,8 +9,11 @@ import (
 func ClientRoutes(e *echo.Echo) {
 	
 	e.GET("/ping-db", controllers.TestDBConnection)
-
-	e.GET("/clients", controllers.GetClients)
+	//e.GET("/clients", controllers.ListClients)
+	
+	e.GET("/clients", controllers.GetClientsPage)
+	
+	// e.GET("/clients", controllers.GetClients)
 	e.POST("/clients", controllers.CreateClient) 
 	e.PUT("/clients/:id", controllers.UpdateClient)
 	e.DELETE("/clients/:id", controllers.DeleteClient)

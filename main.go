@@ -1,6 +1,8 @@
 package main
 
 import (
+	"html/template"
+	"io"
 	"log"
 	"os"
 
@@ -9,18 +11,30 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// TemplateRenderer para Echo
+type TemplateRenderer struct {
+	templates *template.Template
+}
+
+func (t *TemplateRenderer) Render(w io.Writer, name string, data any, c echo.Context) error {
+	return t.templates.ExecuteTemplate(w, name, data)
+}
+
+
 func main() {
 
 	configuration.LoadEnv() 
 
     	log.Println("DB_HOST:", os.Getenv("DB_HOST"))
 
-
-
 	// Inicializa o banco de dados
 	configuration.InitDB()
 
 	e := echo.New()
+
+	// Configurando o sistema de templates
+	tmpl := template.Must(template.ParseGlob("view/*.html"))
+	e.Renderer = &TemplateRenderer{templates: tmpl}
 
 	// Configurar rotas
 	routes.ClientRoutes(e)

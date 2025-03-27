@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"html/template"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -10,18 +12,51 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func CreateClient(c echo.Context) error {
-	var client models.Client
-	if err := c.Bind(&client); err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Dados inválidos"})
+func ListClients(c echo.Context) error {
+	tmpl, err := template.ParseFiles("templates/base.html", "templates/clients.html")
+	if err != nil {
+		return err
 	}
 
-	if err := services.CreateClient(&client); err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+	clients, err := services.GetClients()
+	if err != nil {
+		return err
 	}
 
-	return c.JSON(http.StatusCreated, client)
+	data := struct {
+		Title   string
+		Clients []models.Client
+	}{
+		Title:   "Lista de Clientes",
+		Clients: clients,
+	}
+
+	return tmpl.Execute(c.Response(), data)
 }
+
+func CreateClient(c echo.Context) error {
+    client := models.Client{
+        Name:  c.FormValue("name"),
+        Email: c.FormValue("email"),
+        Phone: c.FormValue("phone"),
+    }
+
+    if err := services.CreateClient(&client); err != nil {
+        return c.String(http.StatusInternalServerError, "Erro ao criar cliente")
+    }
+
+    // Buscar a lista atualizada de clientes
+    clients, err := services.GetClients()
+    if err != nil {
+        return c.String(http.StatusInternalServerError, "Erro ao buscar clientes")
+    }
+
+    // Retorna lista de clientes
+    return c.Render(http.StatusOK, "clients.html", map[string]any{
+        "Clients": clients,
+    })
+}
+
 
 func GetClients(c echo.Context) error {
 	clients, err := services.GetClients()
@@ -65,6 +100,21 @@ func DeleteClient(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, map[string]string{"message": "Cliente excluído com sucesso"})
+}
+
+// Renderiza a página de clientes
+func GetClientsPage(c echo.Context) error {
+	clients, err := services.GetClients()
+	if err != nil {
+		log.Println("Erro ao buscar clientes:", err)
+		return c.String(http.StatusInternalServerError, "Erro ao carregar clientes")
+	}
+
+	log.Println("Clientes encontrados:", clients) // LOG PARA DEBUG
+return c.Render(http.StatusOK, "clients.html", map[string]any{
+	"Clients": clients,
+})
+
 }
 
 // TestDBConnection verifica a conexão com o banco de dados
