@@ -1,28 +1,31 @@
 package controllers
 
 import (
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"strconv"
 
-	"github.com/Hakeera/easy_erp/configuration"
 	models "github.com/Hakeera/easy_erp/model"
 	services "github.com/Hakeera/easy_erp/service"
 	"github.com/labstack/echo/v4"
 )
 
 func ListClients(c echo.Context) error {
-	tmpl, err := template.ParseFiles("templates/base.html", "templates/clients.html")
+	// Carregar o template corretamente
+	tmpl, err := template.ParseFiles("view/clients_list.html") 
 	if err != nil {
-		return err
+		return fmt.Errorf("erro ao carregar o template: %w", err)
 	}
 
+	// Obter a lista de clientes do banco
 	clients, err := services.GetClients()
 	if err != nil {
-		return err
+		return fmt.Errorf("erro ao buscar clientes: %w", err)
 	}
 
+	// Criar os dados a serem passados para o template
 	data := struct {
 		Title   string
 		Clients []models.Client
@@ -31,7 +34,15 @@ func ListClients(c echo.Context) error {
 		Clients: clients,
 	}
 
-	return tmpl.Execute(c.Response(), data)
+	// Definir o tipo de resposta como HTML antes de executar o template
+	c.Response().Header().Set("Content-Type", "text/html; charset=utf-8")
+
+	// Executar o template e renderizar para o usuário
+	if err := tmpl.Execute(c.Response().Writer, data); err != nil {
+		return fmt.Errorf("erro ao renderizar template: %w", err)
+	}
+
+	return nil
 }
 
 func CreateClient(c echo.Context) error {
@@ -51,12 +62,11 @@ func CreateClient(c echo.Context) error {
         return c.String(http.StatusInternalServerError, "Erro ao buscar clientes")
     }
 
-    // Retorna lista de clientes
-    return c.Render(http.StatusOK, "clients.html", map[string]any{
+    // Retornar apenas a lista atualizada para ser injetada no HTML via HTMX
+    return c.Render(http.StatusOK, "base.html", map[string]any{
         "Clients": clients,
     })
 }
-
 
 func GetClients(c echo.Context) error {
 	clients, err := services.GetClients()
@@ -110,21 +120,9 @@ func GetClientsPage(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, "Erro ao carregar clientes")
 	}
 
-	log.Println("Clientes encontrados:", clients) // LOG PARA DEBUG
+	log.Println("Clientes encontrados:", clients) 
 return c.Render(http.StatusOK, "clients.html", map[string]any{
 	"Clients": clients,
 })
 
-}
-
-// TestDBConnection verifica a conexão com o banco de dados
-func TestDBConnection(c echo.Context) error {
-	db := configuration.GetDB()
-
-	// Testa a conexão
-	if err := db.Exec("SELECT 1").Error; err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Banco de dados inacessível"})
-	}
-
-	return c.JSON(http.StatusOK, map[string]string{"message": "Conexão com o banco bem-sucedida!"})
 }
