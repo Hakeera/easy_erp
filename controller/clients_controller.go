@@ -1,50 +1,57 @@
 package controllers
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"strconv"
 
+	"github.com/Hakeera/easy_erp/model"
 	models "github.com/Hakeera/easy_erp/model"
+	"github.com/Hakeera/easy_erp/service"
 	services "github.com/Hakeera/easy_erp/service"
 	"github.com/labstack/echo/v4"
 )
 
-func ListClients(c echo.Context) error {
+// Get Clients data and renders clients_list.html template
+func GetClients(c echo.Context) error {
+	// Buscar a lista de clientes
+	clients, err := service.GetClients()
+	if err != nil {
+		c.Logger().Error("Erro ao buscar clientes:", err)
+		return c.String(http.StatusInternalServerError, "Erro ao buscar clientes")
+	}
+
 	// Carregar o template corretamente
-	tmpl, err := template.ParseFiles("view/clients_list.html") 
-	if err != nil {
-		return fmt.Errorf("erro ao carregar o template: %w", err)
-	}
+	tmpl, err := template.ParseFiles(
+		"view/base.html",
+		"view/clients.html",
+		"view/clients_list.html",
+		"view/clients_form.html",
+	)
 
-	// Obter a lista de clientes do banco
-	clients, err := services.GetClients()
 	if err != nil {
-		return fmt.Errorf("erro ao buscar clientes: %w", err)
+		return c.String(http.StatusInternalServerError, "Erro ao carregar template: " + err.Error())
 	}
-
-	// Criar os dados a serem passados para o template
+		// Dados a serem passados para o template
 	data := struct {
 		Title   string
-		Clients []models.Client
+		Clients []model.Client
 	}{
-		Title:   "Lista de Clientes",
+		Title:   "Página de Clientes",
 		Clients: clients,
 	}
 
-	// Definir o tipo de resposta como HTML antes de executar o template
-	c.Response().Header().Set("Content-Type", "text/html; charset=utf-8")
-
-	// Executar o template e renderizar para o usuário
+	// Renderizar o template com os dados
 	if err := tmpl.Execute(c.Response().Writer, data); err != nil {
-		return fmt.Errorf("erro ao renderizar template: %w", err)
+		c.Logger().Error("Erro ao renderizar template:", err)
+		return c.String(http.StatusInternalServerError, "Erro ao renderizar template")
 	}
 
 	return nil
-}
 
+}
+// Creates a Client and renders template client_list.html 
 func CreateClient(c echo.Context) error {
     client := models.Client{
         Name:  c.FormValue("name"),
@@ -59,24 +66,17 @@ func CreateClient(c echo.Context) error {
     // Buscar a lista atualizada de clientes
     clients, err := services.GetClients()
     if err != nil {
+	    log.Println("Erro ao Criar Cliente:", err)
         return c.String(http.StatusInternalServerError, "Erro ao buscar clientes")
     }
 
     // Retornar apenas a lista atualizada para ser injetada no HTML via HTMX
-    return c.Render(http.StatusOK, "base.html", map[string]any{
+    return c.Render(http.StatusOK, "clients_list.html", map[string]any{
         "Clients": clients,
     })
 }
 
-func GetClients(c echo.Context) error {
-	clients, err := services.GetClients()
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
-	}
-
-	return c.JSON(http.StatusOK, clients)
-}
-
+// Updates Clients by ID
 func UpdateClient(c echo.Context) error {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
@@ -112,17 +112,3 @@ func DeleteClient(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]string{"message": "Cliente excluído com sucesso"})
 }
 
-// Renderiza a página de clientes
-func GetClientsPage(c echo.Context) error {
-	clients, err := services.GetClients()
-	if err != nil {
-		log.Println("Erro ao buscar clientes:", err)
-		return c.String(http.StatusInternalServerError, "Erro ao carregar clientes")
-	}
-
-	log.Println("Clientes encontrados:", clients) 
-return c.Render(http.StatusOK, "clients.html", map[string]any{
-	"Clients": clients,
-})
-
-}
