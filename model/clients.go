@@ -2,11 +2,10 @@ package model
 
 import "gorm.io/gorm"
 
-
 type Client struct {
 	gorm.Model
-	Name  string `json:"name"`
-	Email string `json:"email" gorm:"unique"`
-	Phone string `json:"phone"`
+	Name  string `gorm:"type:varchar(255);not null"`
+	Email string `gorm:"type:varchar(255)"`
+	Phone string `gorm:"type:varchar(50)"`
 }
 

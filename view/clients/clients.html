@@ -1,0 +1,14 @@
+{{ define "clients.html" }}
+{{ template "base.html" . }}
+
+{{ block "content" . }}
+	<h1>Lista de Clientes</h1>
+	<!-- Importando o formulário -->
+	{{ template "clients_form.html" . }}
+
+	<!-- Div onde a lista será recarregada -->
+	<div id="clients-list">
+	    {{ template "clients_list.html" . }}
+	</div>
+{{ end }}
+{{ end }}

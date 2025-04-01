@@ -1,4 +1,4 @@
-package controllers
+package controller
 
 import (
 	"html/template"
@@ -24,16 +24,16 @@ func GetClients(c echo.Context) error {
 
 	// Carregar o template corretamente
 	tmpl, err := template.ParseFiles(
-		"view/base.html",
-		"view/clients.html",
-		"view/clients_list.html",
-		"view/clients_form.html",
+		"view/layouts/base.html",
+		"view/clients/clients.html",
+		"view/clients/clients_list.html",
+		"view/clients/clients_form.html",
 	)
 
 	if err != nil {
 		return c.String(http.StatusInternalServerError, "Erro ao carregar template: " + err.Error())
 	}
-		// Dados a serem passados para o template
+	// Dados a serem passados para o template
 	data := struct {
 		Title   string
 		Clients []model.Client
@@ -49,31 +49,50 @@ func GetClients(c echo.Context) error {
 	}
 
 	return nil
-
 }
+
 // Creates a Client and renders template client_list.html 
 func CreateClient(c echo.Context) error {
+    log.Println("Iniciando criação de cliente...")
+
+    // Criar um novo cliente com os dados do formulário
     client := models.Client{
         Name:  c.FormValue("name"),
         Email: c.FormValue("email"),
         Phone: c.FormValue("phone"),
     }
 
+    log.Println("Dados do cliente recebidos:", client)
+
+    // Tentar salvar no banco de dados
     if err := services.CreateClient(&client); err != nil {
-        return c.String(http.StatusInternalServerError, "Erro ao criar cliente")
+        log.Println("Erro ao criar cliente:", err)
+        return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Erro ao criar cliente"})
     }
+
+    log.Println("Cliente criado com sucesso!")
 
     // Buscar a lista atualizada de clientes
+    log.Println("Buscando lista atualizada de clientes...")
     clients, err := services.GetClients()
     if err != nil {
-	    log.Println("Erro ao Criar Cliente:", err)
-        return c.String(http.StatusInternalServerError, "Erro ao buscar clientes")
+        log.Println("Erro ao buscar clientes:", err)
+        return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Erro ao buscar clientes"})
     }
 
-    // Retornar apenas a lista atualizada para ser injetada no HTML via HTMX
-    return c.Render(http.StatusOK, "clients_list.html", map[string]any{
+    log.Println("Lista de clientes carregada:", clients)
+
+    // Renderizar o template atualizado
+    log.Println("Renderizando template clients_list.html...")
+    err = c.Render(http.StatusOK, "clients_list.html", map[string]any{
         "Clients": clients,
     })
+    if err != nil {
+        log.Println("Erro ao renderizar template:", err)
+    }
+
+    log.Println("Template renderizado com sucesso!")
+    return nil
 }
 
 // Updates Clients by ID

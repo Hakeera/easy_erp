@@ -31,13 +31,13 @@ func main() {
 	configuration.InitDB()
 
 	e := echo.New()
-
-	// Configurando o sistema de templates
-	tmpl := template.Must(template.ParseGlob("view/*.html"))
-	e.Renderer = &TemplateRenderer{templates: tmpl}
-
+	
+	t := &TemplateRenderer{
+		templates: template.Must(template.ParseGlob("view/**/*.html")), 
+}
+e.Renderer = t
 	// Configurar rotas
-	routes.ClientRoutes(e)
+	routes.SetUpRoutes(e)
 
 	// Iniciar o servidor
 	e.Logger.Fatal(e.Start(":1323"))
