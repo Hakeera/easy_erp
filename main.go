@@ -28,7 +28,7 @@ func main() {
     	log.Println("DB_HOST:", os.Getenv("DB_HOST"))
 
 	// Inicializa o banco de dados
-	configuration.InitDB()
+	//configuration.InitDB()
 
 	e := echo.New()
 	

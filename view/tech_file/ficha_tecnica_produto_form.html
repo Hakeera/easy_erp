@@ -1,0 +1,136 @@
+<!-- ficha_tecnica_produto_form.html - Formulário de Ficha Técnica de Produto -->
+<div class="card">
+    <div class="card-header">
+        <h4>Nova Ficha Técnica de Produto</h4>
+    </div>
+    <div class="card-body">
+        <form id="formFichaTecnicaProduto" hx-post="/ficha-tecnica-produto/salvar" hx-target="#mensagem-resposta">
+            <div class="mb-3">
+                <label for="modelo-base" class="form-label">Selecione o Modelo Base</label>
+                <select class="form-select" id="modelo-base" name="FichaTecnicaModeloID" required
+                        hx-get="/ficha-tecnica-modelo/detalhes"
+                        hx-target="#detalhes-modelo"
+                        hx-trigger="change">
+                    <option value="">Selecione...</option>
+                    <!-- Opções serão carregadas do backend -->
+                </select>
+            </div>
+            
+            <div id="detalhes-modelo" class="mb-4">
+                <!-- Os detalhes do modelo serão carregados aqui -->
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="produto-cliente" class="form-label">Cliente</label>
+                    <select class="form-select" id="produto-cliente" name="ClienteID" required>
+                        <option value="">Selecione...</option>
+                        <!-- Opções serão carregadas do backend -->
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="produto-linha" class="form-label">Linha</label>
+                    <input type="text" class="form-control" id="produto-linha" name="Linha">
+                </div>
+            </div>
+            
+            <h5 class="mt-4">Especificações do Produto</h5>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="produto-cor" class="form-label">Cor</label>
+                    <input type="text" class="form-control" id="produto-cor" name="Cor" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="produto-tamanho" class="form-label">Tamanho</label>
+                    <select class="form-select" id="produto-tamanho" name="Tamanho" required>
+                        <option value="">Selecione...</option>
+                        <option value="PP">PP</option>
+                        <option value="P">P</option>
+                        <option value="M">M</option>
+                        <option value="G">G</option>
+                        <option value="GG">GG</option>
+                        <option value="XG">XG</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="produto-valor" class="form-label">Valor de Venda</label>
+                    <div class="input-group">
+                        <span class="input-group-text">R$</span>
+                        <input type="number" step="0.01" class="form-control" id="produto-valor" name="ValorVenda" required>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="produto-descricao" class="form-label">Descrição Específica</label>
+                <textarea class="form-control" id="produto-descricao" name="Descricao" rows="3"></textarea>
+                <small class="text-muted">Deixe em branco para usar a descrição do modelo base</small>
+            </div>
+            
+            <div class="mb-3">
+                <label for="produto-instrucoes" class="form-label">Instruções Específicas</label>
+                <textarea class="form-control" id="produto-instrucoes" name="Instrucoes" rows="3"></textarea>
+                <small class="text-muted">Deixe em branco para usar as instruções do modelo base</small>
+            </div>
+            
+            <h5 class="mt-4">Seleção de Tecidos</h5>
+            <div id="selecao-tecidos">
+                <!-- Opções de tecidos serão carregadas com base no modelo selecionado -->
+                <div class="alert alert-warning">
+                    Selecione um modelo base para carregar os tecidos disponíveis.
+                </div>
+            </div>
+            
+            <h5 class="mt-4">Seleção de Aviamentos</h5>
+            <div id="selecao-aviamentos">
+                <!-- Opções de aviamentos serão carregadas com base no modelo selecionado -->
+                <div class="alert alert-warning">
+                    Selecione um modelo base para carregar os aviamentos disponíveis.
+                </div>
+            </div>
+            
+            <h5 class="mt-4">Desenhos e Posicionamento</h5>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="desenhos-upload" class="form-label">Desenhos e Estampas</label>
+                    <input class="form-control" type="file" id="desenhos-upload" multiple
+                           accept="image/*" name="DesenhosImagens">
+                </div>
+                <div class="col-md-6">
+                    <label for="posicao-desenhos" class="form-label">Posição dos Desenhos</label>
+                    <select class="form-select" id="posicao-desenhos" name="PosicaoDesenhos" multiple>
+                        <option value="Frente">Frente</option>
+                        <option value="Costas">Costas</option>
+                        <option value="Lateral Direita">Lateral Direita</option>
+                        <option value="Lateral Esquerda">Lateral Esquerda</option>
+                        <option value="Manga Direita">Manga Direita</option>
+                        <option value="Manga Esquerda">Manga Esquerda</option>
+                    </select>
+                    <small class="text-muted">Segure CTRL para selecionar múltiplas posições</small>
+                </div>
+            </div>
+            
+            <div class="d-grid gap-2 mt-4">
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-check-lg"></i> Gerar Ficha Técnica de Produto
+                </button>
+            </div>
+        </form>
+        
+        <div id="mensagem-resposta" class="mt-3"></div>
+    </div>
+</div>
+
+<!-- Template para quando um modelo é selecionado -->
+<template id="template-detalhes-modelo">
+    <div class="card bg-light mb-3">
+        <div class="card-header">Detalhes do Modelo Base</div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Modelo:</strong> <span id="detalhe-modelo"></span></p>
+                    <p><strong>Grade:</strong> <span id="detalhe-grade"></span></p>
+                    <p><strong>Categoria:</strong> <span id="detalhe-categoria"></span></p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Custo Total Base:</strong> <span id="detalhe-custo-base"></span></p>

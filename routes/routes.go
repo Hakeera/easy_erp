@@ -6,4 +6,5 @@ import "github.com/labstack/echo/v4"
 func SetUpRoutes(e *echo.Echo)  {
 	ClientRoutes(e)
 	ProductsRoutes(e)
+	TechFileRoutes(e)
 }
