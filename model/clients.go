@@ -2,10 +2,10 @@ package model
 
 import "gorm.io/gorm"
 
-type Client struct {
+type Cliente struct {
 	gorm.Model
-	Name  string `gorm:"type:varchar(255);not null"`
+	Nome  string `gorm:"type:varchar(255);not null"`
 	Email string `gorm:"type:varchar(255)"`
-	Phone string `gorm:"type:varchar(50)"`
+	Telefone string `gorm:"type:varchar(50)"`
 }
 

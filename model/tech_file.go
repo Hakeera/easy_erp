@@ -1,38 +1,9 @@
 package model
 
 import (
+	"fmt"
 	"time"
 )
-
-type Tecido struct {
-	ID uint
-	Nome string
-	FichaTecnica string
-	Rendimento string
-	Aproveitamento string
-	Largura string
-	Custo float64
-	Observacoes string
-}
-
-type Aviamento struct {
-	ID            int     `json:"id"`
-	Tipo          string  `json:"tipo"`
-	Cor           string  `json:"cor"`
-	CustoUnitario float64 `json:"custounitario"`
-}
-
-type Desenho struct {
-	Tipo          string  `json:"tipo"`
-	Imagem        string  `json:"imagem"`
-	Posicao       string  `json:"posicao"`
-	CustoUnitario float64 `json:"custounitario"`
-}
-
-type QtdTecido struct {
-	Grade		string
-	Quantidade	float32
-}
 
 type FichaModelo struct {
 	ID uint `gorm:"primaryKey" json:"id"`
@@ -69,41 +40,32 @@ type FichaProduto struct {
 	QtdEstimada     int         `json:"qtdestimada"`
 }
 
-type Custos struct {
-	ID uint
-	Tecido float64
-	Aviamento float64
-	Corte float64
-	Costura float64
-	Acabamento float64
-	Desenho float64
-	Markup float32
+
+func (fp *FichaProduto) ObterCustoAviamento() {
+	var total float64
+	for _, aviamento := range fp.Aviamentos {
+		total += aviamento.CustoUnitario* float64(aviamento.QtdAviamento)
+	}
+	fp.CustoAviamentos = total
 }
 
-type Produto struct {
-    ID                 uint      `json:"id"`
-    FichaModelo     uint      `json:"ficha_modelo"`
-    FichaProduto	uint`json:"ficha_produto"`
-    ClienteID		uint      `json:"cliente_id"`
-    Situacao           string    `json:"situacao"`
-    Linha              string    `json:"linha"`
-    Categoria 	       string    `json:"categoria"`
-    
-    ValorVenda         float64   `json:"valor_venda"`
+func main() {
+	// Criando um exemplo de ficha de produto
+	ficha := FichaProduto{
+		ID:          1,
+		FichaModelo: 10,
+		Cliente:     "Apramed",
+		Aviamentos: []Aviamento{
+			{ID: 13, Tipo: "Botão", Cor: "Branco", CustoUnitario: 0.1, QtdAviamento: 50},
+			{ID: 10, Tipo: "Zíper", Cor: "Azul", CustoUnitario: 0.7, QtdAviamento: 10},
+		},
+	}
 
-    // Nome 
-    Nome string    `json:"nome"`
-    Modelo	FichaModelo
-    Cliente            Client
-    Tecido             Tecido
-    Cor string
-    Tamanho string  
+	// Calculando custo dos aviamentos
+	ficha.ObterCustoAviamento()
 
-    // Datas
-    DataAtualizacao    time.Time `json:"data_atualizacao"`
+	// Exibindo resultado
+	fmt.Printf("Custo total dos aviamentos: %.2f\n", ficha.CustoAviamentos)
 }
-
-
-
 
 

@@ -1,20 +1,37 @@
 package model
 
-import "gorm.io/gorm"
+import "time"
 
-type Product struct {
-	gorm.Model
-	Name        string `gorm:"not null;size:255"`
-	Style       string `gorm:"size:50"` 
-	Fabric      string `gorm:"size:50"`
-	Color       string `gorm:"size:50"`
-	Size        string `gorm:"size:50"`
-	Client      string `gorm:"size:50"`  
-	Line        string `gorm:"size:50"`
-	Category    string `gorm:"size:50"`
-	Situation   string `gorm:"size:50"`
-	Description string `gorm:"size:500"`
-	Price       int64  `gorm:"not null;default:0"`  
-	Technical   string `gorm:"size:500"`
+type Produto struct {
+    ID                 uint      `json:"id"`
+    FichaModelo     	uint      `json:"ficha_modelo"`
+    FichaProduto	uint`json:"ficha_produto"`
+    ClienteID		uint      `json:"cliente_id"`
+    Situacao           string    `json:"situacao"`
+    Linha              string    `json:"linha"`
+    Categoria 	       string    `json:"categoria"`
+    
+    ValorVenda         float64   `json:"valor_venda"`
+
+    // Nome 
+    Nome string    `json:"nome"`
+    Modelo	FichaModelo
+    Cliente            Cliente
+    Tecido             Tecido
+    Cor string
+    Tamanho string  
+
+    // Datas
+    DataAtualizacao    time.Time `json:"data_atualizacao"`
 }
 
+type Custos struct {
+	ID uint
+	Tecido float64
+	Aviamento float64
+	Corte float64
+	Costura float64
+	Acabamento float64
+	Desenho float64
+	Markup float32
+}

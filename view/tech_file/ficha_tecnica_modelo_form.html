@@ -8,85 +8,54 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap Icons -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
   <style>
-    .nav-tabs .nav-link {
-      color: #495057;
-      border-radius: 0;
-      border-top: 3px solid transparent;
-    }
-    .nav-tabs .nav-link.active {
-      border-top: 3px solid #0d6efd;
-      font-weight: 600;
-    }
-    .tab-indicator {
-      height: 4px;
-      width: 4px;
-      border-radius: 50%;
-      display: inline-block;
-      margin-right: 6px;
-    }
-    .tab-indicator.completed {
-      background-color: #198754;
-    }
-    .tab-indicator.active {
-      background-color: #0d6efd;
-    }
-    .tab-indicator.pending {
-      background-color: #dee2e6;
-    }
-    .card-header-custom {
-      background-color: #f8f9fa;
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-    .step-number {
-      width: 24px;
-      height: 24px;
-      line-height: 24px;
-      text-align: center;
-      border-radius: 50%;
-      background-color: #e9ecef;
-      display: inline-block;
-      margin-right: 8px;
-      font-size: 0.8rem;
-      font-weight: bold;
-    }
-    .nav-link.active .step-number {
-      background-color: #0d6efd;
-      color: white;
-    }
-    .form-label {
-      font-weight: 500;
-    }
     .preview-image-container {
-      height: 140px;
+      height: 180px;
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
     }
     .preview-image-container img {
-      object-fit: cover;
       max-height: 100%;
+      object-fit: contain;
     }
-    .summary-section {
-      background-color: #f8f9fa;
-      border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 20px;
+    .tab-indicator {
+      display: block;
+      height: 3px;
+      width: 100%;
+      margin-top: 5px;
+    }
+    .tab-indicator.active {
+      background-color: #0d6efd;
+    }
+    .tab-indicator.completed {
+      background-color: #198754;
+    }
+    .tab-indicator.pending {
+      background-color: #dee2e6;
+    }
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: #e9ecef;
+      margin-right: 8px;
+    }
+    .nav-link.active .step-number {
+      background-color: #0d6efd;
+      color: white;
     }
     .item-card {
       transition: all 0.2s ease;
-      border-left: 3px solid transparent;
     }
     .item-card:hover {
-      border-left: 3px solid #0d6efd;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    .action-buttons {
-      margin-top: 30px;
-      padding-top: 15px;
-      border-top: 1px solid #dee2e6;
+      transform: translateY(-3px);
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
     }
   </style>
 </head>
@@ -99,44 +68,17 @@
           <button class="nav-link active" id="dados-basicos-tab" data-bs-toggle="tab" 
                   data-bs-target="#dados-basicos" type="button" role="tab">
             <span class="step-number">1</span>
-            <span class="d-none d-md-inline">Dados Básicos</span>
-            <span class="d-inline d-md-none">Básicos</span>
+            <span class="d-none d-md-inline">Informações Gerais</span>
+            <span class="d-inline d-md-none">Geral</span>
             <span class="tab-indicator active"></span>
-          </button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="tecidos-tab" data-bs-toggle="tab" 
-                  data-bs-target="#tecidos" type="button" role="tab">
-            <span class="step-number">2</span>
-            <span class="d-none d-md-inline">Tecidos</span>
-            <span class="d-inline d-md-none">Tecidos</span>
-            <span class="tab-indicator pending"></span>
-          </button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="aviamentos-tab" data-bs-toggle="tab" 
-                  data-bs-target="#aviamentos" type="button" role="tab">
-            <span class="step-number">3</span>
-            <span class="d-none d-md-inline">Aviamentos</span>
-            <span class="d-inline d-md-none">Aviam.</span>
-            <span class="tab-indicator pending"></span>
           </button>
         </li>
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="custos-tab" data-bs-toggle="tab" 
                   data-bs-target="#custos" type="button" role="tab">
-            <span class="step-number">4</span>
+            <span class="step-number">2</span>
             <span class="d-none d-md-inline">Custos</span>
             <span class="d-inline d-md-none">Custos</span>
-            <span class="tab-indicator pending"></span>
-          </button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="imagens-tab" data-bs-toggle="tab" 
-                  data-bs-target="#imagens" type="button" role="tab">
-            <span class="step-number">5</span>
-            <span class="d-none d-md-inline">Imagens</span>
-            <span class="d-inline d-md-none">Img</span>
             <span class="tab-indicator pending"></span>
           </button>
         </li>
@@ -147,7 +89,8 @@
         <input type="hidden" name="ID" value="0">
         
         <div class="tab-content" id="cadastroTabsContent">
-          <!-- Tab 1: Dados Básicos -->
+
+          <!-- Tab 1: Informações Gerais (incluindo Imagens) -->
           <div class="tab-pane fade show active" id="dados-basicos" role="tabpanel">
             <div class="summary-section mb-4">
               <h5><i class="bi bi-info-circle me-2"></i>Dados Básicos do Modelo</h5>
@@ -160,37 +103,54 @@
                 <div class="input-group">
                   <span class="input-group-text"><i class="bi bi-tag"></i></span>
                   <input type="text" class="form-control" id="modelo" name="Modelo" required
-                         placeholder="Ex: Vestido Longo Floral">
+                         placeholder="Ex: Camiseta M/C">
                 </div>
               </div>
               <div class="col-md-6">
                 <label for="grade" class="form-label">Grade <span class="text-danger">*</span></label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="bi bi-grid-3x3"></i></span>
-                  <input type="text" class="form-control" id="grade" name="Grade" required
-                         placeholder="Ex: PP, P, M, G, GG">
+                  <select class="form-select" id="grade" name="Grade" required>
+                    <option value="" selected disabled>Selecione uma opção</option>
+                    <option value="Baby">Baby</option>
+                    <option value="Infantil">Infantil</option>
+                    <option value="Juvenil">Juvenil</option>
+                    <option value="Adulto">Adulto</option>
+                  </select>
                 </div>
               </div>
             </div>
+            
             <div class="row mb-3">
               <div class="col-md-6">
                 <label for="linhas" class="form-label">Linhas</label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="bi bi-diagram-3"></i></span>
                   <input type="text" class="form-control" id="linhas" name="Linhas"
-                         placeholder="Ex: Verão 2025">
+                         placeholder="Ex: Escolar">
                 </div>
               </div>
+              <div class="col-md-6">
+                <label for="dimensoes" class="form-label">Dimensões</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-rulers"></i></span>
+                  <input type="text" class="form-control" id="dimensoes" name="Dimensoes"
+                         placeholder="Tamanho do Molde">
+                </div>
+              </div>
+            </div>
+            
+            <div class="row mb-3">
               <div class="col-md-6">
                 <label for="categoria" class="form-label">Categoria <span class="text-danger">*</span></label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="bi bi-bookmark"></i></span>
                   <select class="form-select" id="categoria" name="Categoria" required>
                     <option value="">Selecione...</option>
-                    <option value="Feminino">Feminino</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Infantil">Infantil</option>
-                    <option value="Unissex">Unissex</option>
+                    <option value="Básico">Básico</option>
+                    <option value="Intermediária">Intermediária</option>
+                    <option value="Avançada">Avançada</option>
+                    <option value="PRO">PRO!</option>
                   </select>
                 </div>
               </div>
@@ -203,6 +163,7 @@
                           placeholder="Descreva as principais características do modelo..."></textarea>
               </div>
             </div>
+            
             <div class="mb-3">
               <label for="instrucoes" class="form-label">Instruções</label>
               <div class="input-group">
@@ -212,173 +173,44 @@
               </div>
             </div>
             
+            <!-- Seção de Imagens movida para a primeira aba -->
+            <div class="summary-section mb-4 mt-5">
+              <h5><i class="bi bi-images me-2"></i>Imagens do Modelo</h5>
+              <p class="text-muted small">Fotos, desenhos técnicos e referências visuais do modelo.</p>
+            </div>
+            
+            <div class="card mb-4 item-card">
+              <div class="card-body">
+                <label for="imagens-upload" class="form-label">
+                  <i class="bi bi-cloud-upload me-2"></i>Carregar Imagens
+                </label>
+                <input class="form-control" type="file" id="imagens-upload" multiple
+                       accept="image/*" name="Imagens">
+                <small class="text-muted">Selecione múltiplas imagens (desenhos técnicos, fotos, etc)</small>
+              </div>
+            </div>
+            
+            <div class="mb-4" id="preview-imagens">
+              <div class="alert alert-info d-flex align-items-center">
+                <i class="bi bi-info-circle me-2 fs-4"></i>
+                <div>Nenhuma imagem carregada. Selecione arquivos para visualizar.</div>
+              </div>
+            </div>
+            
             <div class="action-buttons">
               <div class="d-flex justify-content-end">
-                <button type="button" class="btn btn-primary" onclick="nextTab('tecidos-tab')">
-                  Próximo <i class="bi bi-arrow-right ms-1"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Tab 2: Tecidos -->
-          <div class="tab-pane fade" id="tecidos" role="tabpanel">
-            <div class="summary-section mb-4">
-              <h5><i class="bi bi-layers me-2"></i>Tecidos do Modelo</h5>
-              <p class="text-muted small">Especificações dos tecidos utilizados, rendimentos e aproveitamentos.</p>
-            </div>
-            
-            <div id="lista-tecidos" class="mb-4">
-              <div class="alert alert-info d-flex align-items-center">
-                <i class="bi bi-info-circle me-2 fs-4"></i>
-                <div>Nenhum tecido adicionado. Utilize o formulário abaixo para adicionar.</div>
-              </div>
-            </div>
-            
-            <div class="card mb-4 item-card">
-              <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                <span><i class="bi bi-plus-circle me-2"></i>Adicionar Tecido</span>
-                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="collapse" data-bs-target="#collapseAddTecido">
-                  <i class="bi bi-chevron-down"></i>
-                </button>
-              </div>
-              <div class="card-body collapse show" id="collapseAddTecido">
-                <div class="row mb-3">
-                  <div class="col-md-6">
-                    <label for="tecido-nome" class="form-label">Nome do Tecido</label>
-                    <div class="input-group">
-                      <span class="input-group-text"><i class="bi bi-tag"></i></span>
-                      <input type="text" class="form-control" id="tecido-nome" placeholder="Ex: Algodão Egípcio">
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <label for="tecido-largura" class="form-label">Largura</label>
-                    <div class="input-group">
-                      <span class="input-group-text"><i class="bi bi-arrows-expand"></i></span>
-                      <input type="text" class="form-control" id="tecido-largura" placeholder="Ex: 1,40m">
-                    </div>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <div class="col-md-4">
-                    <label for="tecido-rendimento" class="form-label">Rendimento</label>
-                    <div class="input-group">
-                      <span class="input-group-text"><i class="bi bi-graph-up"></i></span>
-                      <input type="text" class="form-control" id="tecido-rendimento" placeholder="Ex: 2,5m">
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <label for="tecido-aproveitamento" class="form-label">Aproveitamento</label>
-                    <div class="input-group">
-                      <span class="input-group-text"><i class="bi bi-percent"></i></span>
-                      <input type="text" class="form-control" id="tecido-aproveitamento" placeholder="Ex: 85%">
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <label for="tecido-custo" class="form-label">Custo</label>
-                    <div class="input-group">
-                      <span class="input-group-text">R$</span>
-                      <input type="number" step="0.01" class="form-control" id="tecido-custo" placeholder="0,00">
-                    </div>
-                  </div>
-                </div>
-                <div class="mb-3">
-                  <label for="tecido-observacoes" class="form-label">Observações</label>
-                  <textarea class="form-control" id="tecido-observacoes" rows="2"
-                            placeholder="Especificações adicionais, detalhes, etc..."></textarea>
-                </div>
-                <button type="button" class="btn btn-success" 
-                        hx-post="/tecido/adicionar"
-                        hx-include="#tecido-nome,#tecido-largura,#tecido-rendimento,#tecido-aproveitamento,#tecido-custo,#tecido-observacoes"
-                        hx-target="#lista-tecidos"
-                        hx-swap="outerHTML">
-                  <i class="bi bi-plus-lg me-1"></i> Adicionar Tecido
-                </button>
-              </div>
-            </div>
-            
-            <div class="action-buttons">
-              <div class="d-flex justify-content-between">
-                <button type="button" class="btn btn-outline-secondary" onclick="nextTab('dados-basicos-tab')">
-                  <i class="bi bi-arrow-left me-1"></i> Anterior
-                </button>
-                <button type="button" class="btn btn-primary" onclick="nextTab('aviamentos-tab')">
-                  Próximo <i class="bi bi-arrow-right ms-1"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Tab 3: Aviamentos -->
-          <div class="tab-pane fade" id="aviamentos" role="tabpanel">
-            <div class="summary-section mb-4">
-              <h5><i class="bi bi-tools me-2"></i>Aviamentos do Modelo</h5>
-              <p class="text-muted small">Aviamentos utilizados na produção, como botões, zíperes, etc.</p>
-            </div>
-            
-            <div id="lista-aviamentos" class="mb-4">
-              <div class="alert alert-info d-flex align-items-center">
-                <i class="bi bi-info-circle me-2 fs-4"></i>
-                <div>Nenhum aviamento adicionado. Utilize o formulário abaixo para adicionar.</div>
-              </div>
-            </div>
-            
-            <div class="card mb-4 item-card">
-              <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                <span><i class="bi bi-plus-circle me-2"></i>Adicionar Aviamento</span>
-                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="collapse" data-bs-target="#collapseAddAviamento">
-                  <i class="bi bi-chevron-down"></i>
-                </button>
-              </div>
-              <div class="card-body collapse show" id="collapseAddAviamento">
-                <div class="row mb-3">
-                  <div class="col-md-8">
-                    <label for="aviamento-nome" class="form-label">Nome do Aviamento</label>
-                    <div class="input-group">
-                      <span class="input-group-text"><i class="bi bi-tag"></i></span>
-                      <input type="text" class="form-control" id="aviamento-nome" placeholder="Ex: Botão Madrepérola">
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <label for="aviamento-custo" class="form-label">Custo Unitário</label>
-                    <div class="input-group">
-                      <span class="input-group-text">R$</span>
-                      <input type="number" step="0.01" class="form-control" id="aviamento-custo" placeholder="0,00">
-                    </div>
-                  </div>
-                </div>
-                <div class="mb-3">
-                  <label for="aviamento-observacoes" class="form-label">Observações</label>
-                  <textarea class="form-control" id="aviamento-observacoes" rows="2"
-                            placeholder="Quantidade, especificações, detalhes, etc..."></textarea>
-                </div>
-                <button type="button" class="btn btn-success" 
-                        hx-post="/aviamento/adicionar"
-                        hx-include="#aviamento-nome,#aviamento-custo,#aviamento-observacoes"
-                        hx-target="#lista-aviamentos"
-                        hx-swap="outerHTML">
-                  <i class="bi bi-plus-lg me-1"></i> Adicionar Aviamento
-                </button>
-              </div>
-            </div>
-            
-            <div class="action-buttons">
-              <div class="d-flex justify-content-between">
-                <button type="button" class="btn btn-outline-secondary" onclick="nextTab('tecidos-tab')">
-                  <i class="bi bi-arrow-left me-1"></i> Anterior
-                </button>
                 <button type="button" class="btn btn-primary" onclick="nextTab('custos-tab')">
                   Próximo <i class="bi bi-arrow-right ms-1"></i>
                 </button>
               </div>
             </div>
           </div>
-          
-          <!-- Tab 4: Custos -->
+
+          <!-- Tab 2: Custos de Serviço-->
           <div class="tab-pane fade" id="custos" role="tabpanel">
             <div class="summary-section mb-4">
-              <h5><i class="bi bi-cash-coin me-2"></i>Custos Operacionais</h5>
-              <p class="text-muted small">Custos de produção, operação e total do modelo.</p>
+              <h5><i class="bi bi-cash-coin me-2"></i>Custos de Serviços</h5>
+              <p class="text-muted small">Custos relacionados à confecção da peça.</p>
             </div>
             
             <div class="row mb-4">
@@ -438,24 +270,6 @@
               </div>
               <div class="card-body" id="resumo-custos">
                 <div class="row">
-                  <div class="col-md-8">
-                    <table class="table table-sm">
-                      <tbody>
-                        <tr>
-                          <th scope="row" width="40%">Tecidos:</th>
-                          <td id="custo-total-tecidos">R$ 0,00</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">Aviamentos:</th>
-                          <td id="custo-total-aviamentos">R$ 0,00</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">Operacionais:</th>
-                          <td id="custo-total-operacionais">R$ 0,00</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
                   <div class="col-md-4">
                     <div class="alert alert-primary text-center">
                       <h6 class="mb-2">Total Geral</h6>
@@ -468,44 +282,7 @@
             
             <div class="action-buttons">
               <div class="d-flex justify-content-between">
-                <button type="button" class="btn btn-outline-secondary" onclick="nextTab('aviamentos-tab')">
-                  <i class="bi bi-arrow-left me-1"></i> Anterior
-                </button>
-                <button type="button" class="btn btn-primary" onclick="nextTab('imagens-tab')">
-                  Próximo <i class="bi bi-arrow-right ms-1"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Tab 5: Imagens -->
-          <div class="tab-pane fade" id="imagens" role="tabpanel">
-            <div class="summary-section mb-4">
-              <h5><i class="bi bi-images me-2"></i>Imagens do Modelo</h5>
-              <p class="text-muted small">Fotos, desenhos técnicos e referências visuais do modelo.</p>
-            </div>
-            
-            <div class="card mb-4 item-card">
-              <div class="card-body">
-                <label for="imagens-upload" class="form-label">
-                  <i class="bi bi-cloud-upload me-2"></i>Carregar Imagens
-                </label>
-                <input class="form-control" type="file" id="imagens-upload" multiple
-                       accept="image/*" name="Imagens">
-                <small class="text-muted">Selecione múltiplas imagens (desenhos técnicos, fotos, etc)</small>
-              </div>
-            </div>
-            
-            <div class="mb-4" id="preview-imagens">
-              <div class="alert alert-info d-flex align-items-center">
-                <i class="bi bi-info-circle me-2 fs-4"></i>
-                <div>Nenhuma imagem carregada. Selecione arquivos para visualizar.</div>
-              </div>
-            </div>
-            
-            <div class="action-buttons">
-              <div class="d-flex justify-content-between">
-                <button type="button" class="btn btn-outline-secondary" onclick="nextTab('custos-tab')">
+                <button type="button" class="btn btn-outline-secondary" onclick="nextTab('dados-basicos-tab')">
                   <i class="bi bi-arrow-left me-1"></i> Anterior
                 </button>
                 <button type="submit" class="btn btn-success">
@@ -535,7 +312,7 @@
   
   // Atualizar os indicadores visuais de progresso
   function updateTabIndicators(activeTabId) {
-    const tabs = ['dados-basicos-tab', 'tecidos-tab', 'aviamentos-tab', 'custos-tab', 'imagens-tab'];
+    const tabs = ['dados-basicos-tab', 'custos-tab'];
     let activeFound = false;
     
     tabs.forEach(tabId => {
@@ -597,5 +374,6 @@
       `;
     }
   });
-  
 </script>
+</body>
+</html>

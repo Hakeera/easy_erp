@@ -8,7 +8,8 @@ import (
 
 func TechFileRoutes(e *echo.Echo)  {
 
-	e.GET("/tech_file", controller.LoadTechFile)
+	e.GET("/tech_file/model", controller.LoadModelTechFile)
+	e.GET("/tech_file/product", controller.LoadProductTechFile)
 
 
 }

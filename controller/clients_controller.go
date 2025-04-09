@@ -36,7 +36,7 @@ func GetClients(c echo.Context) error {
 	// Dados a serem passados para o template
 	data := struct {
 		Title   string
-		Clients []model.Client
+		Clients []model.Cliente
 	}{
 		Title:   "Página de Clientes",
 		Clients: clients,
@@ -56,10 +56,10 @@ func CreateClient(c echo.Context) error {
     log.Println("Iniciando criação de cliente...")
 
     // Criar um novo cliente com os dados do formulário
-    client := models.Client{
-        Name:  c.FormValue("name"),
+    client := models.Cliente{
+        Nome:  c.FormValue("name"),
         Email: c.FormValue("email"),
-        Phone: c.FormValue("phone"),
+        Telefone: c.FormValue("phone"),
     }
 
     log.Println("Dados do cliente recebidos:", client)
@@ -103,7 +103,7 @@ func UpdateClient(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "ID inválido"})
 	}
 
-	var updatedClient models.Client
+	var updatedClient models.Cliente
 	if err := c.Bind(&updatedClient); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Dados inválidos"})
 	}

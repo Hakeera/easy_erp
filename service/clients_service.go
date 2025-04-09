@@ -8,7 +8,7 @@ import (
 )
 
 // Criar Cliente
-func CreateClient(client *model.Client) error {
+func CreateClient(client *model.Cliente) error {
 	result := configuration.DB.Create(client) // Isso deve adicionar o cliente ao banco
 	if result.Error != nil {
 		return result.Error
@@ -17,9 +17,9 @@ func CreateClient(client *model.Client) error {
 }
 
 // Buscar todos os clientes
-func GetClients() ([]model.Client, error) {
+func GetClients() ([]model.Cliente, error) {
 	db := configuration.GetDB()
-	var clients []model.Client
+	var clients []model.Cliente
 	if err := db.Find(&clients).Error; err != nil {
 		return nil, err
 	}
@@ -27,18 +27,18 @@ func GetClients() ([]model.Client, error) {
 }
 
 // Atualizar Cliente
-func UpdateClient(id uint, updatedData *model.Client) error {
+func UpdateClient(id uint, updatedData *model.Cliente) error {
 	db := configuration.GetDB()
-	var client model.Client
+	var client model.Cliente
 
 	if err := db.First(&client, id).Error; err != nil {
 		return errors.New("cliente não encontrado")
 	}
 
 	// Atualizando os dados
-	client.Name = updatedData.Name
+	client.Nome = updatedData.Nome
 	client.Email = updatedData.Email
-	client.Phone = updatedData.Phone
+	client.Telefone = updatedData.Telefone
 
 	if err := db.Save(&client).Error; err != nil {
 		return err
@@ -49,7 +49,7 @@ func UpdateClient(id uint, updatedData *model.Client) error {
 // Deletar Cliente
 func DeleteClient(id uint) error {
 	db := configuration.GetDB()
-	if err := db.Delete(&model.Client{}, id).Error; err != nil {
+	if err := db.Delete(&model.Cliente{}, id).Error; err != nil {
 		return errors.New("erro ao excluir cliente")
 	}
 	return nil

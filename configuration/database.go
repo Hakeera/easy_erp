@@ -40,7 +40,7 @@ func InitDB() {
 		}
 
 		// Criando a tabela automaticamente
-		err = DB.AutoMigrate(&model.Client{})
+		err = DB.AutoMigrate(&model.Cliente{})
 		if err != nil {
 			log.Fatalf("Erro ao migrar a tabela: %v", err)
 		}
