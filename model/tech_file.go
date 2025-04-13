@@ -1,35 +1,25 @@
 package model
 
-import (
-	"fmt"
-	"time"
-)
-
+// FichaModelo representa a estrutura dos dados da ficha técnica que será utilizada como base para criação da FichaProduto (Produtos do Banco)
 type FichaModelo struct {
-	ID uint `gorm:"primaryKey" json:"id"`
-	Modelo string
-	Grade string
-	Linhas string
-	Categoria string
-	Descricao string
-	Instrucoes string
-	Imagens string
-
-	CustoCostura float64
-	CustoCorte float64
-	CustoAcabamento float64
-
-	DataCriacao time.Time
-	DataAtualiz time.Time
-
-	QtdTecido []QtdTecido
-
-	Status string `gorm:"type:varchar(20);default:'rascunho'" json:"status"` 
+	ID             int      `json:"id"`
+	Modelo         string   `json:"modelo"`
+	Linhas         string   `json:"linhas"`
+	Categoria      string   `json:"categoria"`
+	Grade          string   `json:"grade"`
+	Dimensoes      float64	`json:"dimensoes"`
+	Descricao      string   `json:"descricao"`
+	Instrucoes     string   `json:"instrucoes"`
+	CustoCorte     float64  `json:"custoCorte"`
+	CustoCostura   float64  `json:"custoCostura"`
+	CustoAcabamento float64 `json:"custoAcabamento"`
+	ImagensPaths   []string `json:"imagensPaths"` 
 }
 
+// FichaProduto representa a estrutura da ficha técnica do Produto final. Ela herda dados da FichaModelo para a criação de cada produto de forma personalizada 
 type FichaProduto struct {
 	ID              int         `json:"id"`
-	FichaModelo     int         `json:"fichamodelo"`
+	FichaModeloID     int       `json:"fichamodeloid"`
 	Cliente         string      `json:"cliente"`
 	Tecidos         []Tecido    `json:"tecidos"`
 	CustoTecido     float64     `json:"custotecido"`
@@ -37,10 +27,9 @@ type FichaProduto struct {
 	CustoAviamentos float64     `json:"custoaviamentos"`
 	Desenhos        []Desenho   `json:"desenhos"`
 	CustoDesenho    float64     `json:"custodesenho"`
-	QtdEstimada     int         `json:"qtdestimada"`
 }
 
-
+// Obtém o valor total dos custos de aviamentos
 func (fp *FichaProduto) ObterCustoAviamento() {
 	var total float64
 	for _, aviamento := range fp.Aviamentos {
@@ -49,23 +38,13 @@ func (fp *FichaProduto) ObterCustoAviamento() {
 	fp.CustoAviamentos = total
 }
 
-func main() {
-	// Criando um exemplo de ficha de produto
-	ficha := FichaProduto{
-		ID:          1,
-		FichaModelo: 10,
-		Cliente:     "Apramed",
-		Aviamentos: []Aviamento{
-			{ID: 13, Tipo: "Botão", Cor: "Branco", CustoUnitario: 0.1, QtdAviamento: 50},
-			{ID: 10, Tipo: "Zíper", Cor: "Azul", CustoUnitario: 0.7, QtdAviamento: 10},
-		},
+// Obtém o valor total dos custos de tecidos a partir das informações de cada tecido e da dimensão da ficha modelo utilizada 
+func (fp *FichaProduto) ObterCustoTeciedo(modelo FichaModelo) {
+	var total float64
+	for _, tecido := range fp.Tecidos {
+		total += tecido.Custo * tecido.Rendimento / modelo.Dimensoes
 	}
-
-	// Calculando custo dos aviamentos
-	ficha.ObterCustoAviamento()
-
-	// Exibindo resultado
-	fmt.Printf("Custo total dos aviamentos: %.2f\n", ficha.CustoAviamentos)
+	fp.CustoTecido = total
 }
 
 

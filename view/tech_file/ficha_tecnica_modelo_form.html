@@ -9,55 +9,7 @@
   <!-- Bootstrap Icons -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <style>
-    .preview-image-container {
-      height: 180px;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .preview-image-container img {
-      max-height: 100%;
-      object-fit: contain;
-    }
-    .tab-indicator {
-      display: block;
-      height: 3px;
-      width: 100%;
-      margin-top: 5px;
-    }
-    .tab-indicator.active {
-      background-color: #0d6efd;
-    }
-    .tab-indicator.completed {
-      background-color: #198754;
-    }
-    .tab-indicator.pending {
-      background-color: #dee2e6;
-    }
-    .step-number {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background-color: #e9ecef;
-      margin-right: 8px;
-    }
-    .nav-link.active .step-number {
-      background-color: #0d6efd;
-      color: white;
-    }
-    .item-card {
-      transition: all 0.2s ease;
-    }
-    .item-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-    }
-  </style>
+  <style> </style>
 </head>
 <body>
 <div class="container py-4">
@@ -85,7 +37,8 @@
       </ul>
     </div>
     <div class="card-body">
-      <form id="formFichaTecnicaModelo" hx-post="/ficha-tecnica-modelo/salvar" hx-target="#mensagem-resposta">
+      <form id="formFichaTecnicaModelo" hx-post="/tech_file/model/salvar" hx-target="#mensagem-resposta">
+
         <input type="hidden" name="ID" value="0">
         
         <div class="tab-content" id="cadastroTabsContent">
@@ -169,13 +122,13 @@
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-list-check"></i></span>
                 <textarea class="form-control" id="instrucoes" name="Instrucoes" rows="3"
-                          placeholder="Instruções especiais para produção ou acabamento..."></textarea>
+                          placeholder="Instruções especiais para produção..."></textarea>
               </div>
             </div>
             
-            <!-- Seção de Imagens movida para a primeira aba -->
+            <!-- Seção de Imagens -->
             <div class="summary-section mb-4 mt-5">
-              <h5><i class="bi bi-images me-2"></i>Imagens do Modelo</h5>
+              <h5><i class="bi bi-images me-2"></i>Imagens do Molde</h5>
               <p class="text-muted small">Fotos, desenhos técnicos e referências visuais do modelo.</p>
             </div>
             

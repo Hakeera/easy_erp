@@ -1,79 +1,47 @@
-.nav-tabs .nav-link {
-    color: #495057;
-    border-radius: 0;
-    border-top: 3px solid transparent;
-  }
-  .nav-tabs .nav-link.active {
-    border-top: 3px solid #0d6efd;
-    font-weight: 600;
-  }
-  .tab-indicator {
-    height: 4px;
-    width: 4px;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right: 6px;
-  }
-  .tab-indicator.completed {
-    background-color: #198754;
-  }
-  .tab-indicator.active {
-    background-color: #0d6efd;
-  }
-  .tab-indicator.pending {
-    background-color: #dee2e6;
-  }
-  .card-header-custom {
-    background-color: #f8f9fa;
-    border-bottom: none;
-    padding-bottom: 0;
-  }
-  .step-number {
-    width: 24px;
-    height: 24px;
-    line-height: 24px;
-    text-align: center;
-    border-radius: 50%;
-    background-color: #e9ecef;
-    display: inline-block;
-    margin-right: 8px;
-    font-size: 0.8rem;
-    font-weight: bold;
-  }
-  .nav-link.active .step-number {
-    background-color: #0d6efd;
-    color: white;
-  }
-  .form-label {
-    font-weight: 500;
-  }
-  .preview-image-container {
-    height: 140px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .preview-image-container img {
-    object-fit: cover;
-    max-height: 100%;
-  }
-  .summary-section {
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 20px;
-  }
-  .item-card {
-    transition: all 0.2s ease;
-    border-left: 3px solid transparent;
-  }
-  .item-card:hover {
-    border-left: 3px solid #0d6efd;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
-  .action-buttons {
-    margin-top: 30px;
-    padding-top: 15px;
-    border-top: 1px solid #dee2e6;
-  }
+    .preview-image-container {
+      height: 180px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .preview-image-container img {
+      max-height: 100%;
+      object-fit: contain;
+    }
+    .tab-indicator {
+      display: block;
+      height: 3px;
+      width: 100%;
+      margin-top: 5px;
+    }
+    .tab-indicator.active {
+      background-color: #0d6efd;
+    }
+    .tab-indicator.completed {
+      background-color: #198754;
+    }
+    .tab-indicator.pending {
+      background-color: #dee2e6;
+    }
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: #e9ecef;
+      margin-right: 8px;
+    }
+    .nav-link.active .step-number {
+      background-color: #0d6efd;
+      color: white;
+    }
+    .item-card {
+      transition: all 0.2s ease;
+    }
+    .item-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }

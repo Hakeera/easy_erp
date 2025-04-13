@@ -4,7 +4,7 @@ type Tecido struct {
 	ID uint
 	Nome string
 	FichaTecnica string
-	Rendimento string
+	Rendimento float64 
 	Aproveitamento string
 	Largura string
 	Custo float64
@@ -26,7 +26,3 @@ type Desenho struct {
 	CustoUnitario float64 `json:"custounitario"`
 }
 
-type QtdTecido struct {
-	Grade		string
-	Quantidade	float32
-}
