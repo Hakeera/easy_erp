@@ -3,65 +3,73 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/htmx.org@1.9.2"></script>
 </head>
 
-<form hx-post="/fichamodelo/criar" hx-target="#resultado" hx-swap="innerHTML">
-  <label>Modelo:</label>
-  <input type="text" name="modelo" required><br>
+<body>
+  <form 
+      hx-post="/fichamodelo"
+      hx-target="#resultado"
+      hx-swap="innerHTML"
+      method="POST"
+  >
+    <!-- campos do formulário -->
+    <label>Modelo:</label>
+    <input type="text" name="modelo" required><br>
 
-  <label>Linhas:</label>
-  <input type="text" name="linhas"><br>
+    <label>Linhas:</label>
+    <input type="text" name="linhas"><br>
 
-  <label>Categoria:</label>
-  <input type="text" name="categoria"><br>
+    <label>Categoria:</label>
+    <input type="text" name="categoria"><br>
 
-  <label>Descrição:</label>
-  <textarea name="descricao"></textarea><br>
+    <label>Descrição:</label>
+    <textarea name="descricao"></textarea><br>
 
-  <label>Instruções:</label>
-  <textarea name="instrucoes"></textarea><br>
+    <label>Instruções:</label>
+    <textarea name="instrucoes"></textarea><br>
 
-  <label>Custo de Corte:</label>
-  <input type="number" name="custoCorte" step="0.01"><br>
+    <label>Custo de Corte:</label>
+    <input type="number" name="custoCorte" step="0.01"><br>
 
-  <label>Custo de Costura:</label>
-  <input type="number" name="custoCostura" step="0.01"><br>
+    <label>Custo de Costura:</label>
+    <input type="number" name="custoCostura" step="0.01"><br>
 
-  <label>Custo de Acabamento:</label>
-  <input type="number" name="custoAcabamento" step="0.01"><br>
+    <label>Custo de Acabamento:</label>
+    <input type="number" name="custoAcabamento" step="0.01"><br>
 
-  <div id="grade-dimensao-container">
-    <div class="grade-dimensao">
-      <label>Grade:</label>
-      <input type="text" name="grades[0].grade" required>
-      <label>Dimensão:</label>
-      <input type="number" name="grades[0].dimensao" step="0.01" required>
+    <div id="grade-dimensao-container">
+      <div class="grade-dimensao">
+        <label>Grade:</label>
+	<input type="text" name="grades_grade" required>
+        <label>Dimensão:</label>
+	<input type="number" name="grades_dimensao" step="0.01" required>
+      </div>
     </div>
-  </div>
 
-  <button type="button" onclick="adicionarGrade()">+ Adicionar Grade</button><br><br>
+    <button type="button" onclick="adicionarGrade()">+ Adicionar Grade</button><br><br>
 
-  <button type="submit">Salvar Ficha Modelo</button>
-</form>
+    <button type="submit">Salvar Ficha Modelo</button>
+  </form>
 
-<div id="resultado"></div>
+  <div id="resultado"></div>
 
-<script>
-  let contador = 1;
-  function adicionarGrade() {
-    const container = document.getElementById('grade-dimensao-container');
-    const novaDiv = document.createElement('div');
-    novaDiv.classList.add('grade-dimensao');
-    novaDiv.innerHTML = `
-      <label>Grade:</label>
-      <input type="text" name="grades[${contador}].grade" required>
-      <label>Dimensão:</label>
-      <input type="number" name="grades[${contador}].dimensao" step="0.01" required>
-    `;
-    container.appendChild(novaDiv);
-    contador++;
-  }
-</script>
+  <script>
+    let contador = 1;
+    function adicionarGrade() {
+      const container = document.getElementById('grade-dimensao-container');
+      const novaDiv = document.createElement('div');
+      novaDiv.classList.add('grade-dimensao');
+      novaDiv.innerHTML = `
+        <label>Grade:</label>
+        <input type="text" name="grades_grade" required>
+        <label>Dimensão:</label>
+      	<input type="number" name="grades_dimensao" step="0.01" required>
+      `;
+      container.appendChild(novaDiv);
+      contador++;
+    }
+  </script>
+</body>
+</html>
 
-
-</html> 
