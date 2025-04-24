@@ -2,13 +2,15 @@ package controller
 
 import (
 	"encoding/json"
-	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 	"strconv"
 
+	config "github.com/Hakeera/easy_erp/configuration"
 	"github.com/Hakeera/easy_erp/model"
 	"github.com/labstack/echo/v4"
+	"gorm.io/datatypes"
 )
 
 func LoadModelTechFile(c echo.Context) error {
@@ -31,15 +33,12 @@ func LoadProductTechFile(c echo.Context) error {
 	return tmpl.Execute(c.Response(), nil)
 }
 
-
+// Permanencia no banco de dados
 func CriarFichaModelo(c echo.Context) error {
-	c.Request().ParseForm() // <-- necessário para popular o PostForm
-
 	grades := c.Request().PostForm["grades_grade"]
 	dimensoes := c.Request().PostForm["grades_dimensao"]
 
 	pares := make([]model.ParGradeDimensao, 0, len(grades))
-
 	for i := range grades {
 		d, err := strconv.ParseFloat(dimensoes[i], 64)
 		if err != nil {
@@ -51,32 +50,42 @@ func CriarFichaModelo(c echo.Context) error {
 		})
 	}
 
-	corte, _ := strconv.ParseFloat(c.FormValue("custoCorte"), 64)
-	costura, _ := strconv.ParseFloat(c.FormValue("custoCostura"), 64)
-	acabamento, _ := strconv.ParseFloat(c.FormValue("custoAcabamento"), 64)
+	custoCorte, _ := strconv.ParseFloat(c.FormValue("custoCorte"), 64)
+	custoCostura, _ := strconv.ParseFloat(c.FormValue("custoCostura"), 64)
+	custoAcabamento, _ := strconv.ParseFloat(c.FormValue("custoAcabamento"), 64)
 
+	// Struct lógica (sem GORM)
 	ficha := model.FichaModelo{
 		Modelo:             c.FormValue("modelo"),
 		Linhas:             c.FormValue("linhas"),
 		Categoria:          c.FormValue("categoria"),
 		Descricao:          c.FormValue("descricao"),
 		Instrucoes:         c.FormValue("instrucoes"),
-		CustoCorte:         corte,
-		CustoCostura:       costura,
-		CustoAcabamento:    acabamento,
+		CustoCorte:         custoCorte,
+		CustoCostura:       custoCostura,
+		CustoAcabamento:    custoAcabamento,
 		ParesGradeDimensao: pares,
 	}
 
-	// Mostrar no terminal
-	fmt.Println("Grades recebidas:", grades)
-	fmt.Println("Dimensoes recebidas:", dimensoes)
-
-	// Retornar no frontend
-	jsonFicha, err := json.MarshalIndent(ficha, "", "  ")
+	// Serializa para JSON
+	jsonData, err := json.Marshal(ficha)
 	if err != nil {
-		return c.String(http.StatusInternalServerError, "Erro ao gerar JSON")
+		log.Println("Erro ao serializar ficha:", err)
+		return c.String(http.StatusInternalServerError, "Erro ao processar ficha")
 	}
 
-	return c.HTML(http.StatusOK, "<pre>"+string(jsonFicha)+"</pre>")
+	// Struct de persistência com GORM
+	fichaDB := model.FichaModeloDB{
+		Dados: datatypes.JSON(jsonData),
+	}
+
+	// Salva no banco com GORM
+	if err := config.GetDB().Create(&fichaDB).Error; err != nil {
+		log.Println("Erro ao salvar ficha:", err)
+		return c.String(http.StatusInternalServerError, "Erro ao salvar ficha")
+	}
+
+	return c.String(http.StatusOK, "Ficha Técnica salva com sucesso!")
 }
+
 

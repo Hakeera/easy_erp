@@ -9,7 +9,7 @@ import (
 
 // Criar Cliente
 func CreateClient(client *model.Cliente) error {
-	result := configuration.DB.Create(client) // Isso deve adicionar o cliente ao banco
+	result := config.DB.Create(client) // Isso deve adicionar o cliente ao banco
 	if result.Error != nil {
 		return result.Error
 	}
@@ -18,7 +18,7 @@ func CreateClient(client *model.Cliente) error {
 
 // Buscar todos os clientes
 func GetClients() ([]model.Cliente, error) {
-	db := configuration.GetDB()
+	db := config.GetDB()
 	var clients []model.Cliente
 	if err := db.Find(&clients).Error; err != nil {
 		return nil, err
@@ -28,7 +28,7 @@ func GetClients() ([]model.Cliente, error) {
 
 // Atualizar Cliente
 func UpdateClient(id uint, updatedData *model.Cliente) error {
-	db := configuration.GetDB()
+	db := config.GetDB()
 	var client model.Cliente
 
 	if err := db.First(&client, id).Error; err != nil {
@@ -48,7 +48,7 @@ func UpdateClient(id uint, updatedData *model.Cliente) error {
 
 // Deletar Cliente
 func DeleteClient(id uint) error {
-	db := configuration.GetDB()
+	db := config.GetDB()
 	if err := db.Delete(&model.Cliente{}, id).Error; err != nil {
 		return errors.New("erro ao excluir cliente")
 	}

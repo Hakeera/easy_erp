@@ -1,4 +1,4 @@
-package configuration
+package config
 
 import (
 	"fmt"
@@ -19,40 +19,34 @@ var (
 // InitDB inicializa a conexão com o banco de dados
 func InitDB() {
 	once.Do(func() {
-		// Lendo variáveis de ambiente
 		dbUser := os.Getenv("DB_USER")
 		dbPassword := os.Getenv("DB_PASSWORD")
 		dbName := os.Getenv("DB_NAME")
 		dbHost := os.Getenv("DB_HOST")
 		dbPort := os.Getenv("DB_PORT")
 
-		// Criando a string de conexão
 		dsn := fmt.Sprintf(
 			"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
 			dbHost, dbUser, dbPassword, dbName, dbPort,
 		)
 
-		// Conectando ao banco de dados
 		var err error
 		DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 		if err != nil {
 			log.Fatalf("Erro ao conectar ao banco de dados: %v", err)
 		}
 
-		// Criando a tabela automaticamente
-		err = DB.AutoMigrate(&model.Cliente{})
-		if err != nil {
-			log.Fatalf("Erro ao migrar a tabela: %v", err)
+		// Migrar a tabela usando o próprio DB
+		if err := DB.AutoMigrate(&model.FichaModeloDB{}); err != nil {
+			log.Fatalf("Erro ao migrar banco: %v", err)
 		}
-
-		log.Println("Conexão com o banco de dados estabelecida com sucesso")
 	})
 }
 
-// GetDB retorna a instância do banco de dados já inicializada
+// GetDB retorna a instância do banco de dados inicializada
 func GetDB() *gorm.DB {
 	if DB == nil {
-		log.Fatal("Banco de dados não foi inicializado!") 
+		log.Fatal("Banco de dados não foi inicializado!")
 	}
 	return DB
 }
