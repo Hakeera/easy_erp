@@ -32,10 +32,6 @@ func main() {
 
 	e := echo.New()
 	
-	t := &TemplateRenderer{
-		templates: template.Must(template.ParseGlob("view/**/*.html")), 
-}
-e.Renderer = t
 	// Configurar rotas
 	routes.SetUpRoutes(e)
 
