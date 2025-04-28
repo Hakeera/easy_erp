@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"github.com/Hakeera/easy_erp/controller"
 	"github.com/Hakeera/easy_erp/handler"
 	"github.com/labstack/echo/v4"
 )
@@ -10,6 +9,6 @@ import (
 // @param e *echo.Echo Instância do framework Echo
 func TechFileRoutes(e *echo.Echo)  {
 	e.GET("/fichamodelo", handler.PaginaFichaModelo)
-	e.GET("/fichamodelo/list", controller.ListarFichasModelo)
+	e.GET("/fichamodelo/list", handler.ListarFichasModelo)
 	e.POST("/fichamodelo/create", handler.CriarFichaModelo)
 }
