@@ -3,13 +3,13 @@ package service
 import (
 	"errors"
 
-	"github.com/Hakeera/easy_erp/configuration"
+	"github.com/Hakeera/easy_erp/config"
 	"github.com/Hakeera/easy_erp/model"
 )
 
 // Criar Cliente
-func CreateClient(client *model.Cliente) error {
-	result := config.DB.Create(client) // Isso deve adicionar o cliente ao banco
+func CreateClient(client *model.Client) error {
+	result := config.DB.Create(client) 
 	if result.Error != nil {
 		return result.Error
 	}
@@ -17,9 +17,9 @@ func CreateClient(client *model.Cliente) error {
 }
 
 // Buscar todos os clientes
-func GetClients() ([]model.Cliente, error) {
+func GetClients() ([]model.Client, error) {
 	db := config.GetDB()
-	var clients []model.Cliente
+	var clients []model.Client
 	if err := db.Find(&clients).Error; err != nil {
 		return nil, err
 	}
@@ -27,9 +27,9 @@ func GetClients() ([]model.Cliente, error) {
 }
 
 // Atualizar Cliente
-func UpdateClient(id uint, updatedData *model.Cliente) error {
+func UpdateClient(id uint, updatedData *model.Client) error {
 	db := config.GetDB()
-	var client model.Cliente
+	var client model.Client
 
 	if err := db.First(&client, id).Error; err != nil {
 		return errors.New("cliente não encontrado")
@@ -49,7 +49,7 @@ func UpdateClient(id uint, updatedData *model.Cliente) error {
 // Deletar Cliente
 func DeleteClient(id uint) error {
 	db := config.GetDB()
-	if err := db.Delete(&model.Cliente{}, id).Error; err != nil {
+	if err := db.Delete(&model.Client{}, id).Error; err != nil {
 		return errors.New("erro ao excluir cliente")
 	}
 	return nil

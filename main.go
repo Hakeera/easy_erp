@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	config "github.com/Hakeera/easy_erp/configuration"
+	"github.com/Hakeera/easy_erp/config"
 	"github.com/Hakeera/easy_erp/routes"
 	"github.com/labstack/echo/v4"
 )

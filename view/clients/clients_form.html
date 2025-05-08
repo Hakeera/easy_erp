@@ -1,14 +1,12 @@
 {{ define "clients_form.html" }}
 <form 
-	hx-post="/clients"
-	hx-trigger="submit"
-	hx-target="#clients-list"
-	hx-swap="outerHTML"> 
-
+    hx-post="/clients"
+    hx-trigger="submit"
+    hx-target="#clients-list"
+    hx-swap="outerHTML"> 
     <input type="text" name="name" placeholder="Nome" required>
     <input type="email" name="email" placeholder="Email" required>
     <input type="text" name="phone" placeholder="Telefone" required>
     <button type="submit">Cadastrar Cliente</button>
 </form>
-
 {{ end }}

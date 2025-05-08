@@ -17,8 +17,23 @@ import (
 // @param c echo.Context Contexto da requisição
 // @return error Erro de processamento, se houver
 func PaginaFichaModelo(c echo.Context) error {
-	tmpl := template.Must(template.ParseFiles("view/fichamodelo/index.html"))
-	return tmpl.Execute(c.Response(), nil)
+	// Cria dados para o template
+	data := map[string]interface{}{
+		"Title": "Gerenciamento de Fichas Técnicas",
+	}
+
+	// Carrega todos os templates necessários
+	tmpl, err := template.ParseFiles(
+		"view/layouts/base.html",
+		"view/fichamodelo/index.html",
+	)
+	if err != nil {
+		log.Println("Erro ao carregar templates:", err)
+		return c.String(http.StatusInternalServerError, "Erro ao carregar templates: "+err.Error())
+	}
+
+	// Executa o template base
+	return tmpl.ExecuteTemplate(c.Response(), "base.html", data)
 }
 
 // ListarFichasModelo busca todas as fichas no banco de dados e as exibe na página
@@ -41,23 +56,54 @@ func ListarFichasModelo(c echo.Context) error {
 			fichas = append(fichas, ficha)
 		}
 	}
-	// Renderiza o template passando as fichas
-	tmpl := template.New("lista.html").Funcs(template.FuncMap{
+
+	// Para requisição HTMX, retorna apenas o fragmento da lista
+	if c.Request().Header.Get("HX-Request") == "true" {
+		// Funções auxiliares para o template
+		funcMap := template.FuncMap{
+			"add": func(a, b, c float64) float64 {
+				return a + b + c
+			},
+		}
+
+		tmpl := template.New("lista.html").Funcs(funcMap)
+		tmpl, err := tmpl.ParseFiles("view/fichamodelo/lista.html")
+		if err != nil {
+			log.Println("Erro ao carregar template:", err)
+			return c.String(http.StatusInternalServerError, "Erro ao carregar template: "+err.Error())
+		}
+
+		var buf bytes.Buffer
+		if err := tmpl.ExecuteTemplate(&buf, "fichamodelo_lista", fichas); err != nil {
+			log.Println("Erro ao renderizar template:", err)
+			return c.String(http.StatusInternalServerError, "Erro ao renderizar template: "+err.Error())
+		}
+		return c.HTML(http.StatusOK, buf.String())
+	}
+
+	// Para requisição normal (não-HTMX), retorna a página completa
+	data := map[string]interface{}{
+		"Title":  "Listagem de Fichas Técnicas",
+		"Fichas": fichas,
+	}
+
+	funcMap := template.FuncMap{
 		"add": func(a, b, c float64) float64 {
 			return a + b + c
 		},
-	})
-	tmpl, err := tmpl.ParseFiles("view/fichamodelo/lista.html")
+	}
+
+	tmpl := template.New("base.html").Funcs(funcMap)
+	tmpl, err := tmpl.ParseFiles(
+		"view/layouts/base.html",
+		"view/fichamodelo/lista.html",
+	)
 	if err != nil {
-		log.Println("Erro ao carregar template:", err)
-		return c.String(http.StatusInternalServerError, "Erro ao carregar template")
+		log.Println("Erro ao carregar templates:", err)
+		return c.String(http.StatusInternalServerError, "Erro ao carregar templates: "+err.Error())
 	}
-	var buf bytes.Buffer
-	if err := tmpl.Execute(&buf, fichas); err != nil {
-		log.Println("Erro ao renderizar template:", err)
-		return c.String(http.StatusInternalServerError, "Erro ao renderizar template")
-	}
-	return c.HTML(http.StatusOK, buf.String())
+
+	return tmpl.ExecuteTemplate(c.Response(), "base.html", data)
 }
 
 // CriarFichaModelo processa o formulário de criação de ficha e salva os dados no banco

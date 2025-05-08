@@ -1,18 +1,5 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listagem de Fichas Técnicas</title>
-    <style>
-        .selected {
-            background-color: #e0e0e0;
-        }
-    </style>
-</head>
-<body>
+{{ define "fichamodelo_lista" }}
     <h1>Listagem de Fichas Técnicas</h1>
-
     <!-- Tabela com as fichas -->
     <table border="1" cellpadding="5" cellspacing="0">
         <thead>
@@ -22,8 +9,10 @@
                 <th>Categoria</th>
                 <th>Linhas</th>
                 <th>Descrição</th>
-                <th>Custo Total</th> <!-- Custo total ao invés dos custos individuais -->
-		<th>Dimensões</th>
+                <th>Corte</th>
+                <th>Costura</th>
+                <th>Acabamento</th>
+                <th>Dimensões</th>
             </tr>
         </thead>
         <tbody>
@@ -34,9 +23,10 @@
                 <td>{{.Categoria}}</td>
                 <td>{{.Linhas}}</td>
                 <td>{{.Descricao}}</td>
-                <!-- Exibe o custo total somado -->
-                <td>{{add .CustoCorte .CustoCostura .CustoAcabamento}}</td>
-		<td>
+                <td>{{.CustoCorte}}</td>
+                <td>{{.CustoCostura}}</td>
+                <td>{{.CustoAcabamento}}</td>
+                <td>
                     {{range .ParesGradeDimensao}}
                         <div>{{.Grade}}: {{.Dimensao}}</div>
                     {{end}}
@@ -45,29 +35,22 @@
             {{end}}
         </tbody>
     </table>
-
     <hr>
-
     <!-- Exibe o ID da ficha selecionada -->
     <h2>Ficha Selecionada:</h2>
     <div id="fichaSelecionada">
         <p>Nenhuma ficha selecionada</p>
     </div>
-
     <script>
         function selecionarFicha(row) {
             // Remover a classe 'selected' de todas as linhas
             const rows = document.querySelectorAll('.ficha-row');
             rows.forEach(r => r.classList.remove('selected'));
-
             // Adicionar a classe 'selected' na linha clicada
             row.classList.add('selected');
-
             // Exibir o ID da ficha selecionada
             const fichaId = row.getAttribute('data-id');
             document.getElementById('fichaSelecionada').innerHTML = `<p>Ficha selecionada: ${fichaId}</p>`;
         }
     </script>
-</body>
-</html>
-
+{{ end }}

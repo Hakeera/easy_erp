@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	config "github.com/Hakeera/easy_erp/configuration"
+	"github.com/Hakeera/easy_erp/config"
 	"github.com/Hakeera/easy_erp/model"
 )
 

@@ -16,7 +16,7 @@ type Produto struct {
     // Nome 
     Nome string    `json:"nome"`
     Modelo	FichaModelo
-    Cliente            Cliente
+    Cliente            Client
     Tecido             Tecido
     Cor string
     Tamanho string  

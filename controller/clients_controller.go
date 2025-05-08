@@ -13,6 +13,28 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+func ClientsPage(c echo.Context) error {
+
+	tmpl, err := template.ParseFiles(
+		"view/layouts/base.html",
+		"view/clients/clients.html",
+		"view/clients/clients_form.html",
+		"view/clients/clients_list.html",
+	)
+
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "Erro ao carregar template: " + err.Error())
+	}
+
+	// Renderizar o template com os dados
+	if err := tmpl.Execute(c.Response().Writer, nil); err != nil {
+		c.Logger().Error("Erro ao renderizar template:", err)
+		return c.String(http.StatusInternalServerError, "Erro ao renderizar template")
+	}
+	
+	return nil
+}
+
 // Get Clients data and renders clients_list.html template
 func GetClients(c echo.Context) error {
 	// Buscar a lista de clientes
@@ -36,7 +58,7 @@ func GetClients(c echo.Context) error {
 	// Dados a serem passados para o template
 	data := struct {
 		Title   string
-		Clients []model.Cliente
+		Clients []model.Client
 	}{
 		Title:   "Página de Clientes",
 		Clients: clients,
@@ -56,7 +78,7 @@ func CreateClient(c echo.Context) error {
     log.Println("Iniciando criação de cliente...")
 
     // Criar um novo cliente com os dados do formulário
-    client := models.Cliente{
+    client := models.Client{
         Nome:  c.FormValue("name"),
         Email: c.FormValue("email"),
         Telefone: c.FormValue("phone"),
@@ -103,7 +125,7 @@ func UpdateClient(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "ID inválido"})
 	}
 
-	var updatedClient models.Cliente
+	var updatedClient models.Client
 	if err := c.Bind(&updatedClient); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Dados inválidos"})
 	}

@@ -1,14 +1,5 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>Ficha Técnica - Gerenciamento</title>
-  <script src="https://unpkg.com/htmx.org@1.9.5"></script>
-</head>
-<body>
-
+{{ define "content" }}
   <h1>Gerenciamento de Fichas Técnicas</h1>
-
   <!-- Formulário para criar nova ficha -->
   <form hx-post="/fichamodelo/create" hx-swap="none">
     <label>Modelo: <input type="text" name="modelo"></label><br>
@@ -19,7 +10,6 @@
     <label>Custo Corte: <input type="number" step="0.01" name="custoCorte"></label><br>
     <label>Custo Costura: <input type="number" step="0.01" name="custoCostura"></label><br>
     <label>Custo Acabamento: <input type="number" step="0.01" name="custoAcabamento"></label><br>
-
     <!-- Pares de grade e dimensão -->
     <h3>Pares de Grade e Dimensão</h3>
     <div id="grade-dimensao-container">
@@ -29,18 +19,13 @@
       </div>
     </div>
     <button type="button" onclick="adicionarPar()">Adicionar Par</button><br><br>
-
     <button type="submit">Salvar Ficha Técnica</button>
   </form>
-
   <hr>
-
   <!-- Botão para carregar fichas -->
   <button hx-get="/fichamodelo/list" hx-target="#lista-fichas" hx-swap="innerHTML">Ver Fichas Técnicas</button>
-
   <!-- Área onde as fichas serão listadas -->
   <div id="lista-fichas"></div>
-
   <script>
     function adicionarPar() {
       const container = document.getElementById('grade-dimensao-container');
@@ -53,7 +38,4 @@
       container.appendChild(novoPar);
     }
   </script>
-
-</body>
-</html>
-
+{{ end }}
