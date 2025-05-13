@@ -22,16 +22,20 @@ func (t *TemplateRenderer) Render(w io.Writer, name string, data any, c echo.Con
 
 
 func main() {
-
 	config.LoadEnv() 
-
-    	log.Println("DB_HOST:", os.Getenv("DB_HOST"))
+	log.Println("DB_HOST:", os.Getenv("DB_HOST"))
 
 	// Inicializa o banco de dados
 	config.InitDB()
 
 	e := echo.New()
-	
+
+	// Configura o renderer de templates
+	renderer := &TemplateRenderer{
+		templates: template.Must(template.ParseGlob("view/**/*.html")),
+	}
+	e.Renderer = renderer
+
 	// Configurar rotas
 	routes.SetUpRoutes(e)
 

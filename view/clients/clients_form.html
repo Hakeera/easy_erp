@@ -1,12 +1,79 @@
 {{ define "clients_form.html" }}
 <form 
-    hx-post="/clients"
+    hx-post="/clients/create"
     hx-trigger="submit"
     hx-target="#clients-list"
-    hx-swap="outerHTML"> 
-    <input type="text" name="name" placeholder="Nome" required>
-    <input type="email" name="email" placeholder="Email" required>
-    <input type="text" name="phone" placeholder="Telefone" required>
-    <button type="submit">Cadastrar Cliente</button>
+    hx-swap="outerHTML"
+    class="client-form"> 
+    
+    <div class="form-group">
+        <label for="name">Nome *</label>
+        <input type="text" id="name" name="name" placeholder="Nome completo" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="trading_name">Nome Fantasia</label>
+        <input type="text" id="trading_name" name="trading_name" placeholder="Nome fantasia (para empresas)">
+    </div>
+    
+    <div class="form-group">
+        <label for="document_type">Tipo de Documento *</label>
+        <select id="document_type" name="document_type" required>
+            <option value="">Selecione...</option>
+            <option value="CPF">CPF</option>
+            <option value="CNPJ">CNPJ</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="document_number">Número do Documento *</label>
+        <input type="text" id="document_number" name="document_number" placeholder="Apenas números" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="email@exemplo.com">
+    </div>
+    
+    <div class="form-group">
+        <label for="phone">Telefone</label>
+        <input type="text" id="phone" name="phone" placeholder="(00) 00000-0000">
+    </div>
+    
+    <div class="form-group">
+        <label for="address">Endereço</label>
+        <textarea id="address" name="address" placeholder="Endereço completo"></textarea>
+    </div>
+    
+    <div class="form-group">
+        <label for="cep">CEP</label>
+        <input type="text" id="cep" name="cep" placeholder="00000-000">
+    </div>
+    
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Cadastrar Cliente</button>
+        <button type="reset" class="btn btn-secondary">Limpar</button>
+    </div>
 </form>
+
+<script>
+    // Opcional: Script para máscaras e validações
+    document.addEventListener('DOMContentLoaded', function() {
+        // Altera o campo de documento conforme o tipo selecionado
+        const docTypeSelect = document.getElementById('document_type');
+        const docNumberInput = document.getElementById('document_number');
+        
+        docTypeSelect.addEventListener('change', function() {
+            if (this.value === 'CPF') {
+                docNumberInput.placeholder = 'CPF (apenas números)';
+                docNumberInput.maxLength = 11;
+            } else if (this.value === 'CNPJ') {
+                docNumberInput.placeholder = 'CNPJ (apenas números)';
+                docNumberInput.maxLength = 14;
+            } else {
+                docNumberInput.placeholder = 'Número do documento';
+            }
+        });
+    });
+</script>
 {{ end }}

@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"sync"
+
 	"github.com/Hakeera/easy_erp/model"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -37,10 +38,15 @@ func InitDB() {
 		if err != nil {
 			log.Fatalf("Erro ao conectar ao banco de dados: %v", err)
 		}
-		// Migrar a tabela usando o próprio DB
-		if err := DB.AutoMigrate(&model.FichaModeloDB{}); err != nil {
+		
+		// Migrar as tabelas
+		if err := DB.AutoMigrate(
+			&model.FichaModeloDB{},
+			&model.Client{}, 
+		); err != nil {
 			log.Fatalf("Erro ao migrar banco: %v", err)
 		}
+		
 	})
 }
 

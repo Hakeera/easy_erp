@@ -1,11 +1,37 @@
 {{ define "clients_list.html" }}
 <div id="clients-list">
-    <ul>
-        {{ range .Clients }}
-            <li>{{ .Name }} - {{ .Email }} - {{ .Phone }}</li>
-        {{ else }}
-            <li>Nenhum cliente encontrado.</li>
-        {{ end }}
-    </ul>
+    <table border="1" cellpadding="8" cellspacing="0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Nome Fantasia</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>Endereço</th>
+                <th>Documento</th>
+                <th>CEP</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ range .Clients }}
+                <tr>
+                    <td>{{ .ID }}</td>
+                    <td>{{ .Name }}</td>
+                    <td>{{ .TradingName }}</td>
+                    <td>{{ .Email }}</td>
+                    <td>{{ .Phone }}</td>
+                    <td>{{ .Address }}</td>
+                    <td>{{ .FormatDocument }}</td>
+                    <td>{{ .FormatCEP }}</td>
+                </tr>
+            {{ else }}
+                <tr>
+                    <td colspan="9">Nenhum cliente encontrado.</td>
+                </tr>
+            {{ end }}
+        </tbody>
+    </table>
 </div>
 {{ end }}
+

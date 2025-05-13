@@ -18,7 +18,7 @@ import (
 // @return error Erro de processamento, se houver
 func PaginaFichaModelo(c echo.Context) error {
 	// Cria dados para o template
-	data := map[string]interface{}{
+	data := map[string]any{
 		"Title": "Gerenciamento de Fichas Técnicas",
 	}
 
@@ -42,6 +42,7 @@ func PaginaFichaModelo(c echo.Context) error {
 // @return error Erro de processamento, se houver
 func ListarFichasModelo(c echo.Context) error {
 	var registros []model.FichaModeloDB
+	log.Println("Iniciando Listagem")
 	// Busca os dados das fichas no banco de dados
 	if err := config.GetDB().Find(&registros).Error; err != nil {
 		log.Println("Erro ao buscar fichas:", err)
@@ -102,7 +103,6 @@ func ListarFichasModelo(c echo.Context) error {
 		log.Println("Erro ao carregar templates:", err)
 		return c.String(http.StatusInternalServerError, "Erro ao carregar templates: "+err.Error())
 	}
-
 	return tmpl.ExecuteTemplate(c.Response(), "base.html", data)
 }
 
@@ -112,6 +112,7 @@ func ListarFichasModelo(c echo.Context) error {
 // @param c echo.Context Contexto da requisição
 // @return error Erro de processamento, se houver
 func CriarFichaModelo(c echo.Context) error {
+	log.Println("Iniciando Criação de Ficha Técnica")
 	// Parse manual do formulário (essencial)
 	c.Request().ParseForm()
 	grades := c.Request().PostForm["grades_grade"]

@@ -10,7 +10,10 @@ import (
 
 
 func HomePage(c echo.Context) error {
-	tmpl, err := template.ParseFiles("view/layouts/base.html")
+	tmpl, err := template.ParseFiles("view/home/home.html",
+					"view/layouts/base.html",
+)
+
 
 	if err != nil {
 		log.Println("Erro ao carregar templates:", err)
