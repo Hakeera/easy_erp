@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/Hakeera/easy_erp/model"
-	models "github.com/Hakeera/easy_erp/model"
 	"github.com/Hakeera/easy_erp/service"
 	"github.com/labstack/echo/v4"
 )
@@ -85,7 +84,7 @@ func GetClients(c echo.Context) error {
 func CreateClient(c echo.Context) error {
     log.Println("Iniciando criação de cliente...")
     
-    client := models.Client{
+    client := model.Client{
         Name:           c.FormValue("name"),
         TradingName:    c.FormValue("trading_name"),
         Email:          c.FormValue("email"),
@@ -139,7 +138,7 @@ func UpdateClient(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "ID inválido"})
 	}
 
-	var updatedClient models.Client
+	var updatedClient model.Client
 	if err := c.Bind(&updatedClient); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Dados inválidos"})
 	}

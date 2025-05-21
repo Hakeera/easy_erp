@@ -33,8 +33,8 @@ type FichaModelo struct {
 	Categoria          string            `json:"categoria"`   // Categoria do produto
 	Descricao          string            `json:"descricao"`   // Descrição detalhada
 	Instrucoes         string            `json:"instrucoes"`  // Instruções especiais
-	CustoCorte         float64           `json:"custoCorte"`  // Custo do processo de corte
-	CustoCostura       float64           `json:"custoCostura"`// Custo do processo de costura
-	CustoAcabamento    float64           `json:"custoAcabamento"` // Custo de acabamento
+	CustoCorte         float64          `json:"custoCorte"`  // Custo do processo de corte
+	CustoCostura       float64          `json:"custoCostura"`// Custo do processo de costura
+	CustoAcabamento    float64	     `json:"custoAcabamento"` // Custo de acabamento
 	ParesGradeDimensao []ParGradeDimensao `json:"paresGradeDimensao"` // Configuração de grades e dimensões
 }

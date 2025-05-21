@@ -7,7 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	config "github.com/Hakeera/easy_erp/config"
+	"github.com/Hakeera/easy_erp/config"
 	"github.com/Hakeera/easy_erp/model"
 	"github.com/labstack/echo/v4"
 	"gorm.io/datatypes"
@@ -25,7 +25,7 @@ func PaginaFichaModelo(c echo.Context) error {
 	// Carrega todos os templates necessários
 	tmpl, err := template.ParseFiles(
 		"view/layouts/base.html",
-		"view/fichamodelo/index.html",
+		"view/fichas/ficha_modelo/index.html",
 	)
 	if err != nil {
 		log.Println("Erro ao carregar templates:", err)
@@ -68,7 +68,7 @@ func ListarFichasModelo(c echo.Context) error {
 		}
 
 		tmpl := template.New("lista.html").Funcs(funcMap)
-		tmpl, err := tmpl.ParseFiles("view/fichamodelo/lista.html")
+		tmpl, err := tmpl.ParseFiles("view/fichas/fichamodelo/lista.html")
 		if err != nil {
 			log.Println("Erro ao carregar template:", err)
 			return c.String(http.StatusInternalServerError, "Erro ao carregar template: "+err.Error())
@@ -83,7 +83,7 @@ func ListarFichasModelo(c echo.Context) error {
 	}
 
 	// Para requisição normal (não-HTMX), retorna a página completa
-	data := map[string]interface{}{
+	data := map[string]any{
 		"Title":  "Listagem de Fichas Técnicas",
 		"Fichas": fichas,
 	}
@@ -97,7 +97,7 @@ func ListarFichasModelo(c echo.Context) error {
 	tmpl := template.New("base.html").Funcs(funcMap)
 	tmpl, err := tmpl.ParseFiles(
 		"view/layouts/base.html",
-		"view/fichamodelo/lista.html",
+		"view/fichas/fichamodelo/lista.html",
 	)
 	if err != nil {
 		log.Println("Erro ao carregar templates:", err)
