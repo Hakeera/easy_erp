@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"bytes"
 	"encoding/json"
 	"html/template"
 	"log"
@@ -41,69 +40,49 @@ func PaginaFichaModelo(c echo.Context) error {
 // @param c echo.Context Contexto da requisição
 // @return error Erro de processamento, se houver
 func ListarFichasModelo(c echo.Context) error {
+	log.Println("Iniciando Listagem de Fichas") 
+	
 	var registros []model.FichaModeloDB
-	log.Println("Iniciando Listagem")
+	
+	// Carregar o template corretamente
+	tmpl, err := template.ParseFiles("view/fichas/ficha_modelo/lista.html")
+	if err != nil {
+		log.Printf("Erro ao carregar template: %v", err)
+		return c.String(http.StatusInternalServerError, "Erro ao carregar template: " + err.Error())
+	}
+	
 	// Busca os dados das fichas no banco de dados
 	if err := config.GetDB().Find(&registros).Error; err != nil {
 		log.Println("Erro ao buscar fichas:", err)
 		return c.String(http.StatusInternalServerError, "Erro ao buscar fichas")
 	}
+	
 	// Converte os dados JSON de cada registro em FichaModelo
 	var fichas []model.FichaModelo
 	for _, registro := range registros {
 		var ficha model.FichaModelo
-		if err := json.Unmarshal(registro.Dados, &ficha); err == nil {
-			ficha.ID = registro.ID  // Certifique-se de que o ID da FichaModeloDB seja atribuído à FichaModelo
-			fichas = append(fichas, ficha)
+		if err := json.Unmarshal(registro.Dados, &ficha); err != nil {
+			log.Printf("Erro ao deserializar ficha ID %d: %v", registro.ID, err)
+			continue // Pula registros com erro de deserialização
 		}
+		ficha.ID = registro.ID // Atribui o ID da FichaModeloDB à FichaModelo
+		fichas = append(fichas, ficha)
 	}
-
-	// Para requisição HTMX, retorna apenas o fragmento da lista
-	if c.Request().Header.Get("HX-Request") == "true" {
-		// Funções auxiliares para o template
-		funcMap := template.FuncMap{
-			"add": func(a, b, c float64) float64 {
-				return a + b + c
-			},
-		}
-
-		tmpl := template.New("lista.html").Funcs(funcMap)
-		tmpl, err := tmpl.ParseFiles("view/fichas/fichamodelo/lista.html")
-		if err != nil {
-			log.Println("Erro ao carregar template:", err)
-			return c.String(http.StatusInternalServerError, "Erro ao carregar template: "+err.Error())
-		}
-
-		var buf bytes.Buffer
-		if err := tmpl.ExecuteTemplate(&buf, "fichamodelo_lista", fichas); err != nil {
-			log.Println("Erro ao renderizar template:", err)
-			return c.String(http.StatusInternalServerError, "Erro ao renderizar template: "+err.Error())
-		}
-		return c.HTML(http.StatusOK, buf.String())
-	}
-
-	// Para requisição normal (não-HTMX), retorna a página completa
-	data := map[string]any{
-		"Title":  "Listagem de Fichas Técnicas",
-		"Fichas": fichas,
-	}
-
-	funcMap := template.FuncMap{
-		"add": func(a, b, c float64) float64 {
-			return a + b + c
-		},
-	}
-
-	tmpl := template.New("base.html").Funcs(funcMap)
-	tmpl, err := tmpl.ParseFiles(
-		"view/layouts/base.html",
-		"view/fichas/fichamodelo/lista.html",
-	)
+	
+	log.Printf("Total de fichas carregadas: %d", len(fichas))
+	
+	// Configurar o Content-Type para HTML
+	c.Response().Header().Set("Content-Type", "text/html")
+	
+	// Renderiza o template NOMEADO com as fichas convertidas
+	err = tmpl.ExecuteTemplate(c.Response(), "fichamodelo_lista", fichas)
 	if err != nil {
-		log.Println("Erro ao carregar templates:", err)
-		return c.String(http.StatusInternalServerError, "Erro ao carregar templates: "+err.Error())
+		log.Printf("Erro ao executar template: %v", err)
+		return c.String(http.StatusInternalServerError, "Erro ao renderizar template")
 	}
-	return tmpl.ExecuteTemplate(c.Response(), "base.html", data)
+	
+	log.Println("Template renderizado com sucesso")
+	return nil
 }
 
 // CriarFichaModelo processa o formulário de criação de ficha e salva os dados no banco
