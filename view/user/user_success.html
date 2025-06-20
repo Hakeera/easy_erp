@@ -1,0 +1,14 @@
+<!-- user_success.html - Mensagem de sucesso -->
+{{ define "user_success" }}
+<div class="alert alert-success" 
+     hx-swap-oob="true" 
+     id="user-form-container">
+    <p>{{ . }}</p>
+    <button class="btn-secondary" 
+            hx-get="/users/list" 
+            hx-target="#users-list" 
+            hx-swap="innerHTML">
+        Ver Lista Atualizada
+    </button>
+</div>
+{{ end }}

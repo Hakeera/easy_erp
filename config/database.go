@@ -41,8 +41,9 @@ func InitDB() {
 		
 		// Migrar as tabelas
 		if err := DB.AutoMigrate(
-			&model.FichaModeloDB{},
+			&model.User{}, 
 			&model.Client{}, 
+			&model.FichaModeloDB{},
 		); err != nil {
 			log.Fatalf("Erro ao migrar banco: %v", err)
 		}

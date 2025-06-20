@@ -27,13 +27,14 @@ func main() {
 
 	// Inicializa o banco de dados
 	config.InitDB()
-
+	
 	e := echo.New()
 
 	// Configura o renderer de templates
 	renderer := &TemplateRenderer{
 		templates: template.Must(template.ParseGlob("view/**/*.html")),
 	}
+
 	e.Renderer = renderer
 
 	// Configurar rotas

@@ -1,0 +1,17 @@
+<!-- auth_success.html - Usuário logado -->
+{{ define "auth_success" }}
+<div class="auth-success">
+    <h3>Bem-vindo, {{ .Username }}!</h3>
+    <p>Você está logado como: {{ .Email }}</p>
+    <button hx-post="/auth/logout" 
+            hx-target="#auth-status" 
+            hx-swap="innerHTML">
+        Logout
+    </button>
+</div>
+
+<script>
+    // Mostrar seção de gerenciamento após login
+    document.getElementById('user-management').style.display = 'block';
+</script>
+{{ end }}

@@ -14,7 +14,6 @@ func HomePage(c echo.Context) error {
 					"view/layouts/base.html",
 )
 
-
 	if err != nil {
 		log.Println("Erro ao carregar templates:", err)
 		return c.String(http.StatusInternalServerError, "Erro ao carregar templates: "+err.Error())

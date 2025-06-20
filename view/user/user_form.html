@@ -1,0 +1,51 @@
+{{ define "user_form" }}
+<div class="user-form">
+    <h3>{{ if .ID }}Editar Usuário{{ else }}Novo Usuário{{ end }}</h3>
+    <form hx-post="{{ if .ID }}/users/{{ .ID }}{{ else }}/users{{ end }}" 
+          hx-target="#auth-status" 
+          hx-swap="innerHTML">
+        {{ if .ID }}
+        <input type="hidden" name="_method" value="PUT">
+        {{ end }}
+        
+        <div class="form-group">
+            <label for="username">Nome de Usuário:</label>
+            <input type="text" 
+                   id="username" 
+                   name="username" 
+                   value="{{ .Username }}" 
+                   required 
+                   minlength="3" 
+                   maxlength="50">
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" 
+                   id="email" 
+                   name="email" 
+                   value="{{ .Email }}" 
+                   required>
+        </div>
+        
+        <div class="form-group">
+            <label for="password">{{ if .ID }}Nova Senha (deixe em branco para manter){{ else }}Senha{{ end }}:</label>
+            <input type="password" 
+                   id="password" 
+                   name="password" 
+                   {{ if not .ID }}required{{ end }} 
+                   minlength="6">
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit">{{ if .ID }}Atualizar{{ else }}Criar{{ end }}</button>
+            <button type="button" 
+                    hx-get="/users/cancel" 
+                    hx-target="#auth-status" 
+                    hx-swap="innerHTML">
+                Cancelar
+            </button>
+        </div>
+    </form>
+</div>
+{{ end }}
