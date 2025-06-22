@@ -27,7 +27,25 @@ func main() {
 
 	// Inicializa o banco de dados
 	config.InitDB()
-	
+
+	// TESTE: Verificar se o banco está funcionando
+	db := config.GetDB()
+	if db != nil {
+		log.Println("✅ Banco de dados conectado com sucesso!")
+
+		// Teste simples de conexão
+		sqlDB, err := db.DB()
+		if err == nil {
+			if err := sqlDB.Ping(); err == nil {
+				log.Println("✅ Ping no banco OK!")
+			} else {
+				log.Printf("❌ Erro no ping: %v", err)
+			}
+		}
+	} else {
+		log.Println("❌ Banco de dados é nil!")
+	}
+
 	e := echo.New()
 
 	// Configura o renderer de templates
